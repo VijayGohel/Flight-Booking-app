@@ -1,3 +1,10 @@
+import './styles.scss'
+
 export const App = () => {
-    return <h1>Airline</h1>
+  const hello = "Hello"
+  return (
+    <h1>
+      Airline {process.env.NODE_ENV} {process.env.name}
+    </h1>
+  )
 }
