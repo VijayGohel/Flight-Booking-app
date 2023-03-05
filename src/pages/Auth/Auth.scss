@@ -1,0 +1,43 @@
+@import '../../variables.scss';
+
+.login-container {
+  margin-top: 50px;
+  text-align: center;
+  background-color: $cardColor;
+  padding: 20px;
+  border-radius: 0.5rem;
+}
+
+.signup-form {
+  .form-input {
+    background-color: $inputColor;
+    outline: none;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.8rem;
+    margin: 10px 0;
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .login-link {
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .signup-btn {
+    height: 2rem;
+    width: 6rem;
+    font-size: 14px;
+  }
+
+  .signin-google {
+    width: 50%;
+  }
+
+  .pass-match {
+    font-size: 14px;
+    align-self: flex-end;
+    color: red;
+  }
+}

@@ -1,10 +1,14 @@
 import './styles.scss'
+import Auth from './pages/Auth/Auth'
 
 export const App = () => {
-  const hello = "Hello"
+  const hello = 'Hello'
   return (
-    <h1>
-      Airline {process.env.NODE_ENV} {process.env.name}
-    </h1>
+    <div className="app">
+      <div className="blur"> </div>
+      <div className="blur"> </div>
+
+      <Auth />
+    </div>
   )
 }

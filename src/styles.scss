@@ -1,3 +1,62 @@
-h1 {
-  color: red;
+@import './variables.scss';
+
+.app {
+  color: $black;
+  padding: 1rem;
+  background-color: #f3f3f3;
+  overflow: hidden;
+  height: 100vh;
+
+  .blur {
+    position: absolute;
+    height: 14rem;
+    width: 22rem;
+    border-radius: 50%;
+    background-color: #a6ddf0;
+    filter: blur(72px);
+  }
+
+  div.blur:first-child {
+    top: -15%;
+    right: 0;
+  }
+
+  div.blur:nth-child(2) {
+    left: -10rem;
+    top: 40%;
+  }
+}
+
+.btn {
+  border: none;
+  outline: none;
+  background: $buttonBg;
+  color: white;
+  border-radius: 0.5rem;
+  transition: all 100ms ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+
+  &:hover {
+    background: transparent;
+    color: $orange;
+    border: 2px solid $orange;
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background: silver;
+    pointer-events: none;
+  }
+}
+
+input,
+textarea {
+  font-family: 'Inter', sans-serif;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

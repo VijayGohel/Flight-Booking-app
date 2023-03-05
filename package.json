@@ -14,7 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.2.3",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
@@ -25,6 +27,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@types/react": "^18.0.28",
+    "@types/react-bootstrap": "^0.32.32",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
