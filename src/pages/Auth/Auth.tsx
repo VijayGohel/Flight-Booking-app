@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useGoogleLogin } from '@react-oauth/google'
+import { useState, useEffect } from 'react'
 import './Auth.scss'
+import axios from 'axios'
 
 const Auth = () => {
   const initialState = {
@@ -13,6 +15,27 @@ const Auth = () => {
   const [isSignup, setIsSignup] = useState(true)
   const [passMatched, setPassMatched] = useState(true)
   const [data, setData] = useState(initialState)
+  const [user, setUser] = useState([] as any)
+  const [profile, setProfile] = useState([])
+
+  useEffect(() => {
+    if (user) {
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+              Accept: 'application/json',
+            },
+          }
+        )
+        .then((res) => {
+          setProfile(res.data)
+        })
+        .catch((err) => console.log(err))
+    }
+  }, [user])
 
   const handleChange = (e: any) => {
     setData({ ...data, [e.target.name]: e.target.value })
@@ -34,6 +57,11 @@ const Auth = () => {
     setPassMatched(true)
     setData(initialState)
   }
+
+  const login: any = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log('Login Failed:', error),
+  })
 
   return (
     <div className="container d-flex justify-content-center">
@@ -136,7 +164,7 @@ const Auth = () => {
         <hr />
 
         <div className="row justify-content-center">
-          <a href="/auth/google" className="btn signin-google">
+          <a onClick={login} className="btn signin-google">
             <i className="fa-brands fa-google"></i>
             <div style={{ width: '10px' }}></div>
             <span>Login with Google</span>
