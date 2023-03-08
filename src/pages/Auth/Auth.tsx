@@ -2,12 +2,14 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { useState, useEffect } from 'react'
 import './Auth.scss'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import * as AuthAction from '../../actions/AuthAction'
 
 const Auth = () => {
   const initialState = {
     firstName: '',
     lastName: '',
-    userName: '',
+    email: '',
     password: '',
     confirmPass: '',
   }
@@ -17,6 +19,7 @@ const Auth = () => {
   const [data, setData] = useState(initialState)
   const [user, setUser] = useState([] as any)
   const [profile, setProfile] = useState([])
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (user) {
@@ -45,12 +48,13 @@ const Auth = () => {
     e.preventDefault()
 
     if (isSignup) {
-      if (data.password != data.confirmPass) setPassMatched(false)
-      else console.log('SignUp', data)
-    } else {
-      // dispatch(login(data))
-      console.log('Submit ', data)
-    }
+      if (data.password != data.confirmPass) 
+        setPassMatched(false)
+      else
+        dispatch(AuthAction.singup(data) as any)
+    } 
+    else 
+      dispatch(AuthAction.login(data) as any)
   }
 
   const resetForm = () => {
@@ -99,11 +103,11 @@ const Auth = () => {
             <div className="col-sm-12">
               <input
                 type="text"
-                placeholder="Username"
-                value={data.userName}
+                placeholder="Email"
+                value={data.email}
                 onChange={handleChange}
-                name="userName"
-                id="user-name"
+                name="email"
+                id="email"
                 className="form-input"
               />
             </div>
