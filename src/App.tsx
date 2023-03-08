@@ -6,7 +6,6 @@ import Home from './pages/Home/Home'
 
 export const App = () => {
   const user = useSelector((state) => state.authReducer.authData)
-  console.log(user)
 
   return (
     <div className="app">

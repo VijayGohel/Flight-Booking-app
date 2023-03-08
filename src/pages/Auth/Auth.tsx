@@ -17,7 +17,7 @@ const Auth = () => {
   const [isSignup, setIsSignup] = useState(true)
   const [passMatched, setPassMatched] = useState(true)
   const [data, setData] = useState(initialState)
-  const [user, setUser] = useState([] as any)
+  const [user, setUser] = useState(null as any)
   const [profile, setProfile] = useState([])
   const dispatch = useDispatch()
 
@@ -35,6 +35,24 @@ const Auth = () => {
         )
         .then((res) => {
           setProfile(res.data)
+          axios.get(`http://localhost:3001/users?email=${res.data.email}`)
+          .then(res2=>{
+            if(res2.data.length)
+            {
+              dispatch(AuthAction.login({email: res.data.email, password: 'googleAuth'}) as any)
+            }
+            else
+            {
+              const temp = {
+                email: res.data.email,
+                firstName: res.data.given_name,
+                lastName: res.data.family_name,
+                password: 'googleAuth'
+              }
+              dispatch(AuthAction.singup(temp) as any)
+            }
+          })
+
         })
         .catch((err) => console.log(err))
     }
@@ -50,8 +68,10 @@ const Auth = () => {
     if (isSignup) {
       if (data.password != data.confirmPass) 
         setPassMatched(false)
-      else
-        dispatch(AuthAction.singup(data) as any)
+      else {
+        const {confirmPass, ...otherDetails} = data
+        dispatch(AuthAction.singup(otherDetails) as any)
+      }
     } 
     else 
       dispatch(AuthAction.login(data) as any)
@@ -102,7 +122,7 @@ const Auth = () => {
           <div className="row">
             <div className="col-sm-12">
               <input
-                type="text"
+                type="email"
                 placeholder="Email"
                 value={data.email}
                 onChange={handleChange}
