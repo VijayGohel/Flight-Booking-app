@@ -1,11 +1,23 @@
+@import "~bootstrap/scss/bootstrap";
 @import './variables.scss';
+
+html, body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  height: 100%;
+}
 
 .app {
   color: $black;
-  padding: 1rem;
+  // padding: 1rem;
   background-color: #f3f3f3;
   overflow: hidden;
-  height: 100vh;
+  position:absolute;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  left:0px;
 
   .blur {
     position: absolute;

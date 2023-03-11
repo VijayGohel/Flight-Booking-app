@@ -2,7 +2,7 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { useState, useEffect } from 'react'
 import './Auth.scss'
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import * as AuthAction from '../../actions/AuthAction'
 
 const Auth = () => {
@@ -20,6 +20,7 @@ const Auth = () => {
   const [user, setUser] = useState(null as any)
   const [profile, setProfile] = useState([])
   const dispatch = useDispatch()
+  const loading = useSelector(state=>state.authReducer.loading);
 
   useEffect(() => {
     if (user) {
@@ -180,7 +181,7 @@ const Auth = () => {
 
           <div className="row justify-content-center mt-2">
             <button type="submit" className="btn signup-btn">
-              {isSignup ? 'Sign Up' : 'Login'}
+              {loading ? "Loading..." : isSignup ? 'Sign Up' : 'Login'}
             </button>
           </div>
         </form>
@@ -188,11 +189,15 @@ const Auth = () => {
         <hr />
 
         <div className="row justify-content-center">
-          <a onClick={login} className="btn signin-google">
-            <i className="fa-brands fa-google"></i>
-            <div style={{ width: '10px' }}></div>
-            <span>Login with Google</span>
-          </a>
+          <button onClick={login} className="btn signin-google" disabled={loading}>
+          {loading ? "Loading..." : 
+            (<>
+              <i className="fa-brands fa-google"></i>
+              <div style={{ width: '10px' }}></div>
+              <span>Login with Google</span>
+            </>)
+           }
+          </button>
         </div>
       </div>
     </div>
