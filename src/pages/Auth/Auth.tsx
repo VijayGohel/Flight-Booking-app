@@ -20,7 +20,7 @@ const Auth = () => {
   const [user, setUser] = useState(null as any)
   const [profile, setProfile] = useState([])
   const dispatch = useDispatch()
-  const loading = useSelector(state=>state.authReducer.loading);
+  const loading = useSelector((state) => state.authReducer.loading)
 
   useEffect(() => {
     if (user) {
@@ -36,24 +36,26 @@ const Auth = () => {
         )
         .then((res) => {
           setProfile(res.data)
-          axios.get(`http://localhost:3001/users?email=${res.data.email}`)
-          .then(res2=>{
-            if(res2.data.length)
-            {
-              dispatch(AuthAction.login({email: res.data.email, password: 'googleAuth'}) as any)
-            }
-            else
-            {
-              const temp = {
-                email: res.data.email,
-                firstName: res.data.given_name,
-                lastName: res.data.family_name,
-                password: 'googleAuth'
+          axios
+            .get(`http://localhost:3001/users?email=${res.data.email}`)
+            .then((res2) => {
+              if (res2.data.length) {
+                dispatch(
+                  AuthAction.login({
+                    email: res.data.email,
+                    password: 'googleAuth',
+                  }) as any
+                )
+              } else {
+                const temp = {
+                  email: res.data.email,
+                  firstName: res.data.given_name,
+                  lastName: res.data.family_name,
+                  password: 'googleAuth',
+                }
+                dispatch(AuthAction.singup(temp) as any)
               }
-              dispatch(AuthAction.singup(temp) as any)
-            }
-          })
-
+            })
         })
         .catch((err) => console.log(err))
     }
@@ -67,15 +69,12 @@ const Auth = () => {
     e.preventDefault()
 
     if (isSignup) {
-      if (data.password != data.confirmPass) 
-        setPassMatched(false)
+      if (data.password != data.confirmPass) setPassMatched(false)
       else {
-        const {confirmPass, ...otherDetails} = data
+        const { confirmPass, ...otherDetails } = data
         dispatch(AuthAction.singup(otherDetails) as any)
       }
-    } 
-    else 
-      dispatch(AuthAction.login(data) as any)
+    } else dispatch(AuthAction.login(data) as any)
   }
 
   const resetForm = () => {
@@ -181,7 +180,7 @@ const Auth = () => {
 
           <div className="row justify-content-center mt-2">
             <button type="submit" className="btn signup-btn">
-              {loading ? "Loading..." : isSignup ? 'Sign Up' : 'Login'}
+              {loading ? 'Loading...' : isSignup ? 'Sign Up' : 'Login'}
             </button>
           </div>
         </form>
@@ -189,14 +188,20 @@ const Auth = () => {
         <hr />
 
         <div className="row justify-content-center">
-          <button onClick={login} className="btn signin-google" disabled={loading}>
-          {loading ? "Loading..." : 
-            (<>
-              <i className="fa-brands fa-google"></i>
-              <div style={{ width: '10px' }}></div>
-              <span>Login with Google</span>
-            </>)
-           }
+          <button
+            onClick={login}
+            className="btn signin-google"
+            disabled={loading}
+          >
+            {loading ? (
+              'Loading...'
+            ) : (
+              <>
+                <i className="fa-brands fa-google"></i>
+                <div style={{ width: '10px' }}></div>
+                <span>Login with Google</span>
+              </>
+            )}
           </button>
         </div>
       </div>
