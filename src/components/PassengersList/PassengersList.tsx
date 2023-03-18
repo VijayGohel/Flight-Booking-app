@@ -1,4 +1,8 @@
+import { useEffect } from 'react'
 import { Button, Table } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { getPassengersList } from '../../actions/PassengerAction'
 
 interface IPassenger {
   id: string
@@ -20,24 +24,15 @@ interface IPassenger {
 }
 
 const PassengersList = () => {
-  const passenger: IPassenger = {
-    id: '1',
-    flightId: '1',
-    firstName: 'Vijay',
-    lastName: 'Gohel',
-    mobileNo: 1234567890,
-    dateOfBirth: '15/05/2000',
-    gender: 'Male',
-    passport: 'DEMO123',
-    address: 'Rajkot, Gujarat, India',
-    seatNo: 'C1',
-    ancillaryServices: ['Drinks', 'Baggage'],
-    specialMeal: 'Veg Special',
-    shoppingItems: ['Magazins', 'Books'],
-    isCheckedIn: false,
-    isWheelChair: false,
-    iswithInfants: false,
-  }
+  const { flightId } = useParams()
+  const dispatch = useDispatch()
+  const { passengers, loading } = useSelector(
+    (state: any) => state.passengerReducer
+  )
+
+  useEffect(() => {
+    dispatch(getPassengersList(flightId as string) as any)
+  }, [])
 
   return (
     <div>
@@ -54,30 +49,32 @@ const PassengersList = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{passenger.id}</td>
-            <td>{passenger.firstName}</td>
-            <td>{passenger.lastName}</td>
-            <td>{passenger.gender}</td>
-            <td>{passenger.seatNo}</td>
-            <td>{passenger.isCheckedIn ? 'Checked-In' : 'Not Checked-In'}</td>
-            <td>
-              <Button
-                className="btn m-2"
-                size="sm"
-                onClick={() => console.log(`Clicked ${passenger.id}`)}
-              >
-                {!passenger.isCheckedIn ? 'Check-In' : 'Undo Check-In'}
-              </Button>
-              <Button
-                className="btn m-2"
-                size="sm"
-                onClick={() => console.log(`Clicked ${passenger.id}`)}
-              >
-                Details
-              </Button>
-            </td>
-          </tr>
+          {passengers.map((passenger: IPassenger) => (
+            <tr key={passenger.id}>
+              <td>{passenger.id}</td>
+              <td>{passenger.firstName}</td>
+              <td>{passenger.lastName}</td>
+              <td>{passenger.gender}</td>
+              <td>{passenger.seatNo}</td>
+              <td>{passenger.isCheckedIn ? 'Checked-In' : 'Not Checked-In'}</td>
+              <td>
+                <Button
+                  className="btn m-2"
+                  size="sm"
+                  onClick={() => console.log(`Clicked ${passenger.id}`)}
+                >
+                  {!passenger.isCheckedIn ? 'Check-In' : 'Undo Check-In'}
+                </Button>
+                <Button
+                  className="btn m-2"
+                  size="sm"
+                  onClick={() => console.log(`Clicked ${passenger.id}`)}
+                >
+                  Details
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>
