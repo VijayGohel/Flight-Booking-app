@@ -3,14 +3,18 @@ import Auth from './pages/Auth/Auth'
 import { useSelector } from 'react-redux'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home/Home'
+import Flight from './components/Flight/Flight'
+import NavBar from './components/NavBar/NavBar'
 
 export const App = () => {
-  const user = useSelector((state) => state.authReducer.authData)
+  const user = useSelector((state: any) => state.authReducer.authData)
 
   return (
     <div className="app">
       <div className="blur"> </div>
       <div className="blur"> </div>
+
+      {user && <NavBar />}
 
       <Routes>
         <Route
@@ -24,6 +28,10 @@ export const App = () => {
         <Route
           path="/home"
           element={user ? <Home /> : <Navigate to="/auth" />}
+        />
+        <Route
+          path="/flight/:flightId"
+          element={user ? <Flight /> : <Navigate to="/auth" />}
         />
       </Routes>
     </div>

@@ -20,7 +20,7 @@ const Auth = () => {
   const [user, setUser] = useState(null as any)
   const [profile, setProfile] = useState([])
   const dispatch = useDispatch()
-  const loading = useSelector((state) => state.authReducer.loading)
+  const loading = useSelector((state: any) => state.authReducer.loading)
 
   useEffect(() => {
     if (user) {

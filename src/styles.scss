@@ -70,6 +70,12 @@ textarea {
   font-family: 'Inter', sans-serif;
 }
 
+.table {
+  background-color: #fff;
+  z-index: 1;
+  position: relative;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

@@ -3,22 +3,24 @@ import { Button, Container, Table } from 'react-bootstrap'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFlightsList } from '../../actions/FlightAction'
+import { useNavigate } from 'react-router-dom'
 
 interface IFlightDetails {
-  id: string,
-  flightNo: number,
-  airline: string,
-  from: string,
-  to: string,
-  departureDate: string,
-  arrivalDate: string,
-  special_meals: string[],
+  id: string
+  flightNo: number
+  airline: string
+  from: string
+  to: string
+  departureDate: string
+  arrivalDate: string
+  special_meals: string[]
   ancillary: string[]
 }
 
 const FlightsList = () => {
   const dispatch = useDispatch()
   const { flights, loading } = useSelector((state: any) => state.flightReducer)
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(getFlightsList() as any)
@@ -53,7 +55,11 @@ const FlightsList = () => {
                 <td>{flight.to}</td>
                 <td>{flight.departureDate}</td>
                 <td>
-                  <Button className="btn" size="sm">
+                  <Button
+                    className="btn"
+                    size="sm"
+                    onClick={() => navigate(`../flight/${flight.id}`)}
+                  >
                     Check-In
                   </Button>
                 </td>
