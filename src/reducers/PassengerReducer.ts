@@ -9,6 +9,14 @@ const passengerReducer = (
       return { ...state, loading: false, error: false, passengers: action.data }
     case 'RETRIEVING_FAIL':
       return { ...state, loading: false, error: true }
+      case 'CHECKIN_START':
+        return { ...state, loading: true, error: false }
+      case 'CHECKIN_SUCCESS':
+        const passengers = state.passengers.map((passenger: any) =>
+          passenger.id == action.data.id ? {...action.data} : passenger)
+        return { ...state, loading: false, error: false, passengers: passengers }
+      case 'CHECKIN_FAIL':
+        return { ...state, loading: false, error: true }  
     default:
       return state
   }

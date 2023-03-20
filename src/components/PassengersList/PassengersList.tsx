@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Button, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getPassengersList } from '../../actions/PassengerAction'
+import { checkIn, getPassengersList } from '../../actions/PassengerAction'
 import { getTickets } from '../../api/TicketRequest'
 
 interface IPassenger {
@@ -46,9 +46,9 @@ const PassengersList = () => {
   return (
     <div>
       {loading ? (
-        'Fetching Flights...'
+        'Fetching Passengers...'
       ) : !passengers ? (
-        'No flights available right now.'
+        'No Passengers available for this flight.'
       ) : (
         <Table striped bordered hover className="table">
           <thead>
@@ -77,7 +77,7 @@ const PassengersList = () => {
                   <Button
                     className="btn m-2"
                     size="sm"
-                    onClick={() => console.log(`Clicked ${passenger.id}`)}
+                    onClick={() => dispatch(checkIn(passenger.id, !passenger.isCheckedIn) as any)}
                   >
                     {!passenger.isCheckedIn ? 'Check-In' : 'Undo Check-In'}
                   </Button>
