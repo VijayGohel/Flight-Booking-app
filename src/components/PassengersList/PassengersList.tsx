@@ -113,6 +113,7 @@ const PassengersList = () => {
           show={showDetails}
           passenger={selectedPassenger}
           flight={currentFlight}
+          closeModal={() => setShowDetails(false)}
         />
       )}
     </div>

@@ -27,7 +27,7 @@ const FlightsList = () => {
   }, [])
 
   return (
-    <Container fluid>
+    <Container>
       {loading ? (
         'Fetching Flights...'
       ) : !flights ? (

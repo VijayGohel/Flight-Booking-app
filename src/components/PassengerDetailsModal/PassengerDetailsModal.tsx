@@ -2,16 +2,26 @@ import { useEffect, useState } from 'react'
 import { Button, Col } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
-import { Container, Modal } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
+import { Modal } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { updatePassenger } from '../../actions/PassengerAction'
 import { IPassenger } from '../PassengersList/PassengersList'
 
 const PassengerDetailsModal = (props: any) => {
-  const { show, flight } = props
+  const { show, flight, closeModal } = props
   const [passenger, setPassenger] = useState<IPassenger>()
+  const [validated, setValidated] = useState({
+    firstName: false,
+    lastName: false,
+    mobileNo: false,
+    dateOfBirth: false,
+    passport: false,
+    address: false,
+  })
   const isAdmin: boolean = useSelector(
     (state: any) => state.authReducer.authData
   ).user.isAdmin
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setPassenger(props.passenger)
@@ -19,46 +29,73 @@ const PassengerDetailsModal = (props: any) => {
 
   const handleChange = (e: any) => {
     if (e.target.type == 'checkbox') {
-      const name = e.target.name.split('_')[0]
-      const value = e.target.name.split('_')[1]
-      let temp = passenger[name].map((item) => item)
+      const name: 'ancillaryServices' | 'shoppingItems' =
+        e.target.name.split('_')[0]
+      const value: string = e.target.name.split('_')[1]
+      let temp: string[] | undefined =
+        passenger && passenger[name].map((item: string) => item)
 
       if (e.target.checked) temp?.push(value)
-      else temp = temp.filter((item) => item != value)
+      else temp = temp?.filter((item) => item != value)
       setPassenger({ ...passenger, [name]: temp })
     } else if (e.target.type == 'radio') {
       const name = e.target.name.split('_')[0]
       let value = e.target.name.split('_')[1]
       value = value == 'true' ? true : value == 'false' ? false : value
       setPassenger({ ...passenger, [name]: value })
-    } else setPassenger({ ...passenger, [e?.target?.name]: e?.target?.value })
+    } else {
+      setPassenger({ ...passenger, [e?.target?.name]: e?.target?.value })
+      const temp = {...validated}
+      temp[e?.target?.name]=false
+      setValidated(temp);
+    }
   }
 
   const handleClose = () => {
-    console.log('Close')
+    closeModal()
   }
 
-  const handleSave = () => {
-    console.log('Save')
+  const handleSave = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    let hasError: boolean = false;
+    const errors = {...validated};
+
+    [
+      'firstName',
+      'lastName',
+      'mobileNo',
+      'dateOfBirth',
+      'passport',
+      'address',
+    ].map((item) => {
+      if (!passenger[item] || passenger[item] == '') {
+        hasError = true
+        errors[item] = true;
+      }
+
+    })
+    if (!hasError) {
+      dispatch(updatePassenger(passenger?.id, passenger) as any)
+      closeModal()
+    }
+    else
+      setValidated(errors)
   }
 
   return (
     <Modal aria-labelledby="contained-modal-title-vcenter" show={show}>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton onHide={closeModal}>
         <Modal.Title id="contained-modal-title-vcenter">
           Passenger Details
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className="show-grid">
-        <Form
-          onSubmit={(e) => {
-            e.preventDefault()
-            console.log(e)
-          }}
-        >
+        <Form>
           <Row>
             <Col sm={6} xs={12} className="mb-3">
-              <Form.Group>
+              <Form.Group controlId="validationFirstName">
                 <Form.Label>First Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -67,8 +104,13 @@ const PassengerDetailsModal = (props: any) => {
                   name={'firstName'}
                   plaintext={!isAdmin}
                   readOnly={!isAdmin}
+                  required
+                  isInvalid={validated.firstName}
                   onChange={handleChange}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please enter first name.
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col sm={6} xs={12} className="mb-3">
@@ -81,8 +123,13 @@ const PassengerDetailsModal = (props: any) => {
                   value={passenger?.lastName}
                   plaintext={!isAdmin}
                   readOnly={!isAdmin}
+                  required
+                  isInvalid={validated.lastName}
                   onChange={handleChange}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please enter last name.
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -98,8 +145,13 @@ const PassengerDetailsModal = (props: any) => {
                   value={passenger?.mobileNo}
                   plaintext={!isAdmin}
                   readOnly={!isAdmin}
+                  required
+                  isInvalid={validated.mobileNo}
                   onChange={handleChange}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please enter mobile number.
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col sm={6} xs={12} className="mb-3">
@@ -112,8 +164,13 @@ const PassengerDetailsModal = (props: any) => {
                   value={passenger?.dateOfBirth}
                   plaintext={!isAdmin}
                   readOnly={!isAdmin}
+                  required
+                  isInvalid={validated.dateOfBirth}
                   onChange={handleChange}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please enter date of birth.
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -167,8 +224,13 @@ const PassengerDetailsModal = (props: any) => {
                   value={passenger?.passport}
                   plaintext={!isAdmin}
                   readOnly={!isAdmin}
+                  required
+                  isInvalid={validated.passport}
                   onChange={handleChange}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please enter passport.
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col sm={6} xs={12} className="mb-3">
@@ -186,14 +248,20 @@ const PassengerDetailsModal = (props: any) => {
               value={passenger?.address}
               plaintext={!isAdmin}
               readOnly={!isAdmin}
+              required
+              isInvalid={validated.address}
               onChange={handleChange}
             />
+            <Form.Control.Feedback type="invalid">
+              Please enter address.
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Ancillary Services</Form.Label>
             {flight.ancillaryServices.map((service: string) => (
               <Form.Check
+                key={`ancillaryServices_${service}`}
                 value={service}
                 type="checkbox"
                 aria-label={service}
@@ -209,6 +277,7 @@ const PassengerDetailsModal = (props: any) => {
             <Form.Label>Special meals</Form.Label>
             {flight.specialMeals.map((meal: string) => (
               <Form.Check
+                key={`specialMeal_${meal}`}
                 value={meal}
                 type="radio"
                 aria-label={meal}
@@ -224,6 +293,7 @@ const PassengerDetailsModal = (props: any) => {
             <Form.Label>Shopping Items</Form.Label>
             {flight.shoppingItems.map((item: string) => (
               <Form.Check
+                key={`shoppingItems_${item}`}
                 className="col-sm-6 col-md-3"
                 value={item}
                 type="checkbox"

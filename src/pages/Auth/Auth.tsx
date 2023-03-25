@@ -19,8 +19,13 @@ const Auth = () => {
   const [data, setData] = useState(initialState)
   const [user, setUser] = useState(null as any)
   const [profile, setProfile] = useState([])
+  const [localError, setLocalError] = useState<boolean>(false);
   const dispatch = useDispatch()
-  const loading = useSelector((state: any) => state.authReducer.loading)
+  const {loading, error} = useSelector((state: any) => state.authReducer)
+
+  useEffect(() => {
+    setLocalError(error)
+  }, [error])
 
   useEffect(() => {
     if (user) {
@@ -80,6 +85,7 @@ const Auth = () => {
   const resetForm = () => {
     setPassMatched(true)
     setData(initialState)
+    setLocalError(false);
   }
 
   const login: any = useGoogleLogin({
@@ -100,10 +106,11 @@ const Auth = () => {
                   type="text"
                   placeholder="First Name"
                   value={data.firstName}
+                  required
                   onChange={handleChange}
                   name="firstName"
                   id="first-name"
-                  className="form-input"
+                  className="form-input form-control"
                 />
               </div>
               <div className="col-md-6 col-sm-12">
@@ -111,6 +118,7 @@ const Auth = () => {
                   type="text"
                   placeholder="Last Name"
                   value={data.lastName}
+                  required
                   onChange={handleChange}
                   name="lastName"
                   id="last-name"
@@ -125,6 +133,7 @@ const Auth = () => {
                 type="email"
                 placeholder="Email"
                 value={data.email}
+                required
                 onChange={handleChange}
                 name="email"
                 id="email"
@@ -139,6 +148,7 @@ const Auth = () => {
                 type="password"
                 placeholder="Password"
                 value={data.password}
+                required
                 onChange={handleChange}
                 name="password"
                 id="pass"
@@ -151,6 +161,7 @@ const Auth = () => {
                   type="password"
                   placeholder="Confirm Password"
                   value={data.confirmPass}
+                  required
                   onChange={handleChange}
                   name="confirmPass"
                   id="confirm-pass"
@@ -162,6 +173,10 @@ const Auth = () => {
 
           {!passMatched && (
             <span className="pass-match">*Password does not match!</span>
+          )}
+
+          {localError && (
+            <span className="pass-match">{`${isSignup ? 'Signup' : 'Login'} failed! Please try again.`}</span>
           )}
 
           <div
