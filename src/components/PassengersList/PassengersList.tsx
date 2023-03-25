@@ -1,11 +1,12 @@
-import { useEffect } from 'react'
-import { Button, Table } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
+import { Button, Table, Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { checkIn, getPassengersList } from '../../actions/PassengerAction'
 import { getTickets } from '../../api/TicketRequest'
+import PassengerDetailsModal from '../PassengerDetailsModal/PassengerDetailsModal'
 
-interface IPassenger {
+export interface IPassenger {
   id: string
   firstName: string
   lastName: string
@@ -24,11 +25,17 @@ interface IPassenger {
 }
 
 const PassengersList = () => {
+  const [showDetails, setShowDetails] = useState<boolean>(false)
+  const [selectedPassenger, setSelectedPassenger] = useState<any>({})
+
   const { flightId } = useParams()
   const dispatch = useDispatch()
   const { passengers, loading } = useSelector(
     (state: any) => state.passengerReducer
   )
+  const currentFlight = useSelector(
+    (state: any) => state.flightReducer
+  ).flights.filter((flight: any) => flight.id == flightId)[0]
 
   useEffect(() => {
     getFlightTickets(flightId as string)
@@ -77,14 +84,21 @@ const PassengersList = () => {
                   <Button
                     className="btn m-2"
                     size="sm"
-                    onClick={() => dispatch(checkIn(passenger.id, !passenger.isCheckedIn) as any)}
+                    onClick={() =>
+                      dispatch(
+                        checkIn(passenger.id, !passenger.isCheckedIn) as any
+                      )
+                    }
                   >
                     {!passenger.isCheckedIn ? 'Check-In' : 'Undo Check-In'}
                   </Button>
                   <Button
                     className="btn m-2"
                     size="sm"
-                    onClick={() => console.log(`Clicked ${passenger.id}`)}
+                    onClick={() => {
+                      setShowDetails(!showDetails)
+                      setSelectedPassenger(passenger)
+                    }}
                   >
                     Details
                   </Button>
@@ -93,6 +107,13 @@ const PassengersList = () => {
             ))}
           </tbody>
         </Table>
+      )}
+      {showDetails && (
+        <PassengerDetailsModal
+          show={showDetails}
+          passenger={selectedPassenger}
+          flight={currentFlight}
+        />
       )}
     </div>
   )

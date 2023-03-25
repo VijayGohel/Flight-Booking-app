@@ -3,20 +3,21 @@ const passengerReducer = (
   action: any
 ) => {
   switch (action.type) {
-    case 'RETRIEVING_START':
+    case 'PASSENGERS_RETRIEVING_START':
       return { ...state, loading: true, error: false }
-    case 'RETRIEVING_SUCCESS':
+    case 'PASSENGERS_RETRIEVING_SUCCESS':
       return { ...state, loading: false, error: false, passengers: action.data }
-    case 'RETRIEVING_FAIL':
+    case 'PASSENGERS_RETRIEVING_FAIL':
       return { ...state, loading: false, error: true }
-      case 'CHECKIN_START':
-        return { ...state, loading: true, error: false }
-      case 'CHECKIN_SUCCESS':
-        const passengers = state.passengers.map((passenger: any) =>
-          passenger.id == action.data.id ? {...action.data} : passenger)
-        return { ...state, loading: false, error: false, passengers: passengers }
-      case 'CHECKIN_FAIL':
-        return { ...state, loading: false, error: true }  
+    case 'CHECKIN_START':
+      return { ...state, loading: true, error: false }
+    case 'CHECKIN_SUCCESS':
+      const passengers = state.passengers.map((passenger: any) =>
+        passenger.id == action.data.id ? { ...action.data } : passenger
+      )
+      return { ...state, loading: false, error: false, passengers: passengers }
+    case 'CHECKIN_FAIL':
+      return { ...state, loading: false, error: true }
     default:
       return state
   }
