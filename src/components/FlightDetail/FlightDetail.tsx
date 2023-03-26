@@ -9,6 +9,7 @@ const FlightDetail = () => {
   const currentFlight = useSelector(
     (state: any) => state.flightReducer
   ).flights.filter((flight: any) => flight.id == flightId)[0]
+  const [showDetails, setShowDetails] = useState<boolean>(false)
   
   return (
     <div>
@@ -31,8 +32,23 @@ const FlightDetail = () => {
               <Card.Text>Arrival: {currentFlight.arrivalDate}</Card.Text>
             </Col>
           </Row>
+          <Button
+            className="btn mt-2"
+            size="sm"
+            onClick={() => setShowDetails(!showDetails)}
+          >
+            Details
+          </Button>
         </Card.Body>
       </Card>
+
+      {showDetails && (
+        <FlightDetailsModal
+          show={showDetails}
+          flight={currentFlight}
+          closeModal={() => setShowDetails(false)}
+        />
+      )}
     </div>
   )
 }
