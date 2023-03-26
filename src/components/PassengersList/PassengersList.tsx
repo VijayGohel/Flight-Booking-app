@@ -82,7 +82,7 @@ const PassengersList = () => {
                 </td>
                 <td>
                   <Button
-                    className="btn m-2"
+                    className="btn m-2 d-inline-block"
                     size="sm"
                     onClick={() =>
                       dispatch(
@@ -93,7 +93,7 @@ const PassengersList = () => {
                     {!passenger.isCheckedIn ? 'Check-In' : 'Undo Check-In'}
                   </Button>
                   <Button
-                    className="btn m-2"
+                    className="btn m-2 d-inline-block"
                     size="sm"
                     onClick={() => {
                       setShowDetails(!showDetails)

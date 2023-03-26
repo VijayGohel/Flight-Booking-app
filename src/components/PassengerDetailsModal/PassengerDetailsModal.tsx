@@ -8,8 +8,25 @@ import { updatePassenger } from '../../actions/PassengerAction'
 import { IPassenger } from '../PassengersList/PassengersList'
 
 const PassengerDetailsModal = (props: any) => {
+  const initialValues: IPassenger = {
+    firstName: '',
+    lastName: '',
+    address: '',
+    dateOfBirth: '',
+    gender: 'Male',
+    mobileNo: 0,
+    passport: '',
+    seatNo: '',
+    ancillaryServices: [],
+    shoppingItems: [],
+    specialMeal: '',
+    isWheelChair: false,
+    iswithInfants: false,
+    isCheckedIn: false,
+    id: '',
+  }
   const { show, flight, closeModal } = props
-  const [passenger, setPassenger] = useState<IPassenger>()
+  const [passenger, setPassenger] = useState<IPassenger>(initialValues)
   const [validated, setValidated] = useState({
     firstName: false,
     lastName: false,
@@ -45,9 +62,9 @@ const PassengerDetailsModal = (props: any) => {
       setPassenger({ ...passenger, [name]: value })
     } else {
       setPassenger({ ...passenger, [e?.target?.name]: e?.target?.value })
-      const temp = {...validated}
-      temp[e?.target?.name]=false
-      setValidated(temp);
+      const temp = { ...validated }
+      temp[e?.target?.name] = false
+      setValidated(temp)
     }
   }
 
@@ -59,10 +76,10 @@ const PassengerDetailsModal = (props: any) => {
     e.preventDefault()
     e.stopPropagation()
 
-    let hasError: boolean = false;
-    const errors = {...validated};
+    let hasError: boolean = false
+    const errors = { ...validated }
 
-    [
+    ;[
       'firstName',
       'lastName',
       'mobileNo',
@@ -72,16 +89,13 @@ const PassengerDetailsModal = (props: any) => {
     ].map((item) => {
       if (!passenger[item] || passenger[item] == '') {
         hasError = true
-        errors[item] = true;
+        errors[item] = true
       }
-
     })
     if (!hasError) {
       dispatch(updatePassenger(passenger?.id, passenger) as any)
       closeModal()
-    }
-    else
-      setValidated(errors)
+    } else setValidated(errors)
   }
 
   return (
@@ -95,7 +109,7 @@ const PassengerDetailsModal = (props: any) => {
         <Form>
           <Row>
             <Col sm={6} xs={12} className="mb-3">
-              <Form.Group controlId="validationFirstName">
+              <Form.Group>
                 <Form.Label>First Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -294,7 +308,6 @@ const PassengerDetailsModal = (props: any) => {
             {flight.shoppingItems.map((item: string) => (
               <Form.Check
                 key={`shoppingItems_${item}`}
-                className="col-sm-6 col-md-3"
                 value={item}
                 type="checkbox"
                 aria-label={item}

@@ -19,10 +19,10 @@ const Auth = () => {
   const [data, setData] = useState(initialState)
   const [user, setUser] = useState(null as any)
   const [profile, setProfile] = useState([])
-  const [localError, setLocalError] = useState<boolean>(false);
-  const [localLoading, setLocalLoading] = useState<boolean>(false);
+  const [localError, setLocalError] = useState<boolean>(false)
+  const [localLoading, setLocalLoading] = useState<boolean>(false)
   const dispatch = useDispatch()
-  const {loading, error} = useSelector((state: any) => state.authReducer)
+  const { loading, error } = useSelector((state: any) => state.authReducer)
 
   useEffect(() => {
     setLocalError(error)
@@ -181,8 +181,10 @@ const Auth = () => {
             <span className="pass-match">*Password does not match!</span>
           )}
 
-          {(localError && localLoading) && (
-            <span className="pass-match">{`${isSignup ? 'Signup' : 'Login'} failed! Please try again.`}</span>
+          {localError && localLoading && (
+            <span className="pass-match">{`${
+              isSignup ? 'Signup' : 'Login'
+            } failed! Please try again.`}</span>
           )}
 
           <div
@@ -214,7 +216,7 @@ const Auth = () => {
             className="btn signin-google"
             disabled={loading}
           >
-            {loading  ? (
+            {loading ? (
               'Loading...'
             ) : (
               <>
