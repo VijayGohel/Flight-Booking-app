@@ -20,12 +20,17 @@ const Auth = () => {
   const [user, setUser] = useState(null as any)
   const [profile, setProfile] = useState([])
   const [localError, setLocalError] = useState<boolean>(false);
+  const [localLoading, setLocalLoading] = useState<boolean>(false);
   const dispatch = useDispatch()
   const {loading, error} = useSelector((state: any) => state.authReducer)
 
   useEffect(() => {
     setLocalError(error)
   }, [error])
+
+  useEffect(() => {
+    setLocalLoading(localLoading || loading)
+  }, [loading])
 
   useEffect(() => {
     if (user) {
@@ -85,7 +90,8 @@ const Auth = () => {
   const resetForm = () => {
     setPassMatched(true)
     setData(initialState)
-    setLocalError(false);
+    setLocalError(false)
+    setLocalLoading(false)
   }
 
   const login: any = useGoogleLogin({
@@ -175,7 +181,7 @@ const Auth = () => {
             <span className="pass-match">*Password does not match!</span>
           )}
 
-          {localError && (
+          {(localError && localLoading) && (
             <span className="pass-match">{`${isSignup ? 'Signup' : 'Login'} failed! Please try again.`}</span>
           )}
 
@@ -208,7 +214,7 @@ const Auth = () => {
             className="btn signin-google"
             disabled={loading}
           >
-            {loading ? (
+            {loading  ? (
               'Loading...'
             ) : (
               <>
