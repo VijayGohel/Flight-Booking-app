@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { Button, Form } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateFlight } from '../../actions/FlightAction'
 
 export interface IFlight {
@@ -21,6 +21,9 @@ const FlightDetailsModal = (props: any) => {
   const { show, closeModal } = props
   const [flight, setFlight] = useState<IFlight>()
   const dispatch = useDispatch()
+  const isAdmin: boolean = useSelector(
+    (state: any) => state.authReducer.authData
+  ).user.isAdmin
 
   useEffect(() => {
     const temp = JSON.parse(JSON.stringify(props.flight))
@@ -85,11 +88,15 @@ const FlightDetailsModal = (props: any) => {
         })
       }
     )
-    if (!hasError) {    
-      const ancillaryServicesTemp = temp.ancillaryServices.map((item: any) => item.value)
+    if (!hasError) {
+      const ancillaryServicesTemp = temp.ancillaryServices.map(
+        (item: any) => item.value
+      )
       const specialMealsTemp = temp.specialMeals.map((item: any) => item.value)
-      const shoppingItemsTemp = temp.shoppingItems.map((item: any) => item.value)
-      
+      const shoppingItemsTemp = temp.shoppingItems.map(
+        (item: any) => item.value
+      )
+
       temp.ancillaryServices = ancillaryServicesTemp
       temp.specialMeals = specialMealsTemp
       temp.shoppingItems = shoppingItemsTemp
@@ -127,146 +134,169 @@ const FlightDetailsModal = (props: any) => {
         <Form>
           <Row>
             <Col sm={6} xs={12} className="mb-3">
-              <div className="mb-2">Flight No</div>
+              <div className="mb-2 fw-bold">Flight No</div>
               <div>{flight?.flightNo}</div>
             </Col>
             <Col sm={6} xs={12} className="mb-3">
-              <div className="mb-2">Flight Name</div>
+              <div className="mb-2 fw-bold">Flight Name</div>
               <div>{flight?.airline}</div>
             </Col>
           </Row>
 
           <Row>
             <Col sm={6} xs={12} className="mb-3">
-              <div className="mb-2">From</div>
+              <div className="mb-2 fw-bold">From</div>
               <div>{flight?.from}</div>
             </Col>
             <Col sm={6} xs={12} className="mb-3">
-              <div className="mb-2">To</div>
+              <div className="mb-2 fw-bold">To</div>
               <div>{flight?.to}</div>
             </Col>
           </Row>
 
           <Row>
             <Col sm={6} xs={12} className="mb-3">
-              <div className="mb-2">Departure</div>
+              <div className="mb-2 fw-bold">Departure</div>
               <div>{flight?.departureDate}</div>
             </Col>
             <Col sm={6} xs={12} className="mb-3">
-              <div className="mb-2">Arrival</div>
+              <div className="mb-2 fw-bold">Arrival</div>
               <div>{flight?.arrivalDate}</div>
             </Col>
           </Row>
 
           <Form.Group className="mb-3">
-            <Form.Label>Ancillary Services</Form.Label>
-            <Button
-              className="btn"
-              size="sm"
-              onClick={() => addInput('ancillaryServices')}
-            >
-              Add
-            </Button>
+            <Form.Label className="fw-bold">Ancillary Services</Form.Label>
+            {isAdmin && (
+              <Button
+                className="btn"
+                size="sm"
+                onClick={() => addInput('ancillaryServices')}
+              >
+                Add
+              </Button>
+            )}
             {flight?.ancillaryServices.map((service: any, index: number) => (
               <Row className="my-2" key={`ancillaryServices_${index}`}>
-                <Col xs={10}>
-                  <Form.Control
-                    value={service.value}
-                    type="text"
-                    aria-label={service.value}
-                    required
-                    name={`ancillaryServices_${index}`}
-                    onChange={(e) =>
-                      handleChange(e, 'ancillaryServices', index)
-                    }
-                    isInvalid={service.error}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Please enter Ancillary Service.
-                  </Form.Control.Feedback>
-                </Col>
-                <Col xs={1}>
-                  <i
-                    role="button"
-                    className={'fa-solid fa-xmark mt-2'}
-                    style={{ fontSize: 20 }}
-                    onClick={() => removeInput('ancillaryServices', index)}
-                  ></i>
-                </Col>
+                {isAdmin ? (
+                  <>
+                    <Col xs={10}>
+                      <Form.Control
+                        value={service.value}
+                        type="text"
+                        aria-label={service.value}
+                        required
+                        name={`ancillaryServices_${index}`}
+                        onChange={(e) =>
+                          handleChange(e, 'ancillaryServices', index)
+                        }
+                        isInvalid={service.error}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please enter Ancillary Service.
+                      </Form.Control.Feedback>
+                    </Col>
+                    <Col xs={1}>
+                      <i
+                        role="button"
+                        className={'fa-solid fa-xmark mt-2 fs-4'}
+                        onClick={() => removeInput('ancillaryServices', index)}
+                      ></i>
+                    </Col>
+                  </>
+                ) : (
+                  <div>{service.value}</div>
+                )}
               </Row>
             ))}
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Special meals</Form.Label>
-            <Button
-              className="btn"
-              size="sm"
-              onClick={() => addInput('specialMeals')}
-            >
-              Add
-            </Button>
+            <Form.Label className="fw-bold">Special meals</Form.Label>
+            {isAdmin && (
+              <Button
+                className="btn"
+                size="sm"
+                onClick={() => addInput('specialMeals')}
+              >
+                Add
+              </Button>
+            )}
             {flight?.specialMeals.map((meal: any, index: number) => (
               <Row className="my-2" key={`specialMeal_${index}`}>
-                <Col xs={10}>
-                  <Form.Control
-                    value={meal.value}
-                    type="text"
-                    aria-label={meal}
-                    required
-                    name={`specialMeal_${index}`}
-                    onChange={(e) => handleChange(e, 'specialMeals', index)}
-                    isInvalid={meal.error}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Please enter Meal.
-                  </Form.Control.Feedback>
-                </Col>
-                <Col xs={1}>
-                  <i
-                    role="button"
-                    className={'fa-solid fa-xmark mt-2'}
-                    style={{ fontSize: 20 }}
-                    onClick={() => removeInput('specialMeals', index)}
-                  ></i>
-                </Col>
+                {isAdmin ? (
+                  <>
+                    <Col xs={10}>
+                      <Form.Control
+                        value={meal.value}
+                        type="text"
+                        aria-label={meal}
+                        required
+                        name={`specialMeal_${index}`}
+                        onChange={(e) => handleChange(e, 'specialMeals', index)}
+                        isInvalid={meal.error}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please enter Meal.
+                      </Form.Control.Feedback>
+                    </Col>
+                    <Col xs={1}>
+                      <i
+                        role="button"
+                        className={'fa-solid fa-xmark mt-2 fs-4'}
+                        onClick={() => removeInput('specialMeals', index)}
+                      ></i>
+                    </Col>
+                  </>
+                ) : (
+                  <div>{meal.value}</div>
+                )}
               </Row>
             ))}
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Shopping Items</Form.Label>
-            <Button
-              className="btn"
-              size="sm"
-              onClick={() => addInput('shoppingItems')}
-            >
-              Add
-            </Button>
+            <Form.Label className="fw-bold">Shopping Items</Form.Label>
+            {isAdmin && (
+              <Button
+                className="btn"
+                size="sm"
+                onClick={() => addInput('shoppingItems')}
+              >
+                Add
+              </Button>
+            )}
             {flight?.shoppingItems.map((item: any, index: number) => (
               <Row className="my-2" key={`shoppingItems_${index}`}>
-                <Col xs={10}>
-                  <Form.Control
-                    value={item.value}
-                    type="text"
-                    aria-label={item}
-                    required
-                    name={`shoppingItems_${index}`}
-                    onChange={(e) => handleChange(e, 'shoppingItems', index)}
-                    isInvalid={item.error}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Please enter Shopping Item.
-                  </Form.Control.Feedback>
-                </Col>
-                <Col xs={1}>
-                  <i
-                    role="button"
-                    className={'fa-solid fa-xmark mt-2'}
-                    style={{ fontSize: 20 }}
-                    onClick={() => removeInput('shoppingItems', index)}
-                  ></i>
-                </Col>
+                {isAdmin ? (
+                  <>
+                    <Col xs={10}>
+                      <Form.Control
+                        value={item.value}
+                        type="text"
+                        aria-label={item}
+                        required
+                        name={`shoppingItems_${index}`}
+                        onChange={(e) =>
+                          handleChange(e, 'shoppingItems', index)
+                        }
+                        isInvalid={item.error}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please enter Shopping Item.
+                      </Form.Control.Feedback>
+                    </Col>
+                    <Col xs={1}>
+                      <i
+                        role="button"
+                        className={'fa-solid fa-xmark mt-2 fs-4'}
+                        onClick={() => removeInput('shoppingItems', index)}
+                      ></i>
+                    </Col>
+                  </>
+                ) : (
+                  <div>{item.value}</div>
+                )}
               </Row>
             ))}
           </Form.Group>
@@ -276,9 +306,11 @@ const FlightDetailsModal = (props: any) => {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSave}>
-          Save Changes
-        </Button>
+        {isAdmin && (
+          <Button variant="primary" onClick={handleSave}>
+            Save Changes
+          </Button>
+        )}
       </Modal.Footer>
     </Modal>
   )

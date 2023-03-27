@@ -110,7 +110,7 @@ const PassengerDetailsModal = (props: any) => {
           <Row>
             <Col sm={6} xs={12} className="mb-3">
               <Form.Group>
-                <Form.Label>First Name</Form.Label>
+                <Form.Label className="fw-bold">First Name</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="First Name"
@@ -129,7 +129,7 @@ const PassengerDetailsModal = (props: any) => {
             </Col>
             <Col sm={6} xs={12} className="mb-3">
               <Form.Group>
-                <Form.Label>Last Name</Form.Label>
+                <Form.Label className="fw-bold">Last Name</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Last Name"
@@ -151,7 +151,7 @@ const PassengerDetailsModal = (props: any) => {
           <Row>
             <Col sm={6} xs={12} className="mb-3">
               <Form.Group>
-                <Form.Label>Mobile Number</Form.Label>
+                <Form.Label className="fw-bold">Mobile Number</Form.Label>
                 <Form.Control
                   type="tel"
                   placeholder="Phone Number"
@@ -170,7 +170,7 @@ const PassengerDetailsModal = (props: any) => {
             </Col>
             <Col sm={6} xs={12} className="mb-3">
               <Form.Group>
-                <Form.Label>Date of Birth</Form.Label>
+                <Form.Label className="fw-bold">Date of Birth</Form.Label>
                 <Form.Control
                   type="date"
                   placeholder="Date of Birth"
@@ -190,7 +190,7 @@ const PassengerDetailsModal = (props: any) => {
           </Row>
 
           <Form.Group className="mb-3">
-            <Form.Label>Gender</Form.Label>
+            <Form.Label className="fw-bold">Gender</Form.Label>
             <span style={{ marginRight: 10 }}></span>
             <Form.Check
               value="Male"
@@ -218,11 +218,11 @@ const PassengerDetailsModal = (props: any) => {
 
           <Row>
             <Col xs={6} className="mb-3">
-              <div className="mb-2">Flight No</div>
+              <div className="mb-2 fw-bold">Flight No</div>
               <div>{flight.flightNo}</div>
             </Col>
             <Col xs={6} className="mb-3">
-              <div className="mb-2">Flight Name</div>
+              <div className="mb-2 fw-bold">Flight Name</div>
               <div>{flight.airline}</div>
             </Col>
           </Row>
@@ -230,7 +230,7 @@ const PassengerDetailsModal = (props: any) => {
           <Row>
             <Col sm={6} xs={12} className="mb-3">
               <Form.Group>
-                <Form.Label>Passport</Form.Label>
+                <Form.Label className="fw-bold">Passport</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Passport"
@@ -248,31 +248,35 @@ const PassengerDetailsModal = (props: any) => {
               </Form.Group>
             </Col>
             <Col sm={6} xs={12} className="mb-3">
-              <div className="mb-2">Seat Number</div>
+              <div className="mb-2 fw-bold">Seat Number</div>
               <div>{passenger?.seatNo}</div>
             </Col>
           </Row>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Address</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={2}
-              name={'address'}
-              value={passenger?.address}
-              plaintext={!isAdmin}
-              readOnly={!isAdmin}
-              required
-              isInvalid={validated.address}
-              onChange={handleChange}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please enter address.
-            </Form.Control.Feedback>
-          </Form.Group>
+          <Row>
+            <Form.Group className="mb-3">
+              <Form.Label className="fw-bold">Address</Form.Label>
+              {isAdmin ? (
+                <Form.Control
+                  as="textarea"
+                  rows={2}
+                  name={'address'}
+                  value={passenger?.address}
+                  required
+                  isInvalid={validated.address}
+                  onChange={handleChange}
+                />
+              ) : (
+                <div>{passenger?.address}</div>
+              )}
+              <Form.Control.Feedback type="invalid">
+                Please enter address.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
 
           <Form.Group className="mb-3">
-            <Form.Label>Ancillary Services</Form.Label>
+            <Form.Label className="fw-bold">Ancillary Services</Form.Label>
             {flight.ancillaryServices.map((service: string) => (
               <Form.Check
                 key={`ancillaryServices_${service}`}
@@ -288,7 +292,7 @@ const PassengerDetailsModal = (props: any) => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Special meals</Form.Label>
+            <Form.Label className="fw-bold">Special meals</Form.Label>
             {flight.specialMeals.map((meal: string) => (
               <Form.Check
                 key={`specialMeal_${meal}`}
@@ -304,7 +308,7 @@ const PassengerDetailsModal = (props: any) => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Shopping Items</Form.Label>
+            <Form.Label className="fw-bold">Shopping Items</Form.Label>
             {flight.shoppingItems.map((item: string) => (
               <Form.Check
                 key={`shoppingItems_${item}`}
@@ -320,7 +324,7 @@ const PassengerDetailsModal = (props: any) => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>isWheelChair</Form.Label>
+            <Form.Label className="fw-bold">Is wheel chair required</Form.Label>
             <span style={{ marginRight: 10 }}></span>
             <Form.Check
               value="Yes"
@@ -347,7 +351,7 @@ const PassengerDetailsModal = (props: any) => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>iswithInfants</Form.Label>
+            <Form.Label className="fw-bold">Is with infants</Form.Label>
             <span style={{ marginRight: 10 }}></span>
             <Form.Check
               value="Yes"

@@ -12,7 +12,9 @@ export const getFlightsList = () => async (dispatch: any) => {
   }
 }
 
-export const updateFlight = (flightId: string | undefined, formData: IFlight | undefined) => async (dispatch: any) => {
+export const updateFlight =
+  (flightId: string | undefined, formData: IFlight | undefined) =>
+  async (dispatch: any) => {
     dispatch({ type: 'FLIGHT_UPDATING_START' })
     try {
       const { data } = await FlightApi.updateFlight(flightId, formData)
@@ -21,4 +23,4 @@ export const updateFlight = (flightId: string | undefined, formData: IFlight | u
       dispatch({ type: 'FLIGHT_UPDATING_FAIL' })
       console.log(error)
     }
-}
+  }

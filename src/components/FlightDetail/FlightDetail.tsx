@@ -10,7 +10,7 @@ const FlightDetail = () => {
     (state: any) => state.flightReducer
   ).flights.filter((flight: any) => flight.id == flightId)[0]
   const [showDetails, setShowDetails] = useState<boolean>(false)
-  
+
   return (
     <div>
       <Card>
