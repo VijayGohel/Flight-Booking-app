@@ -9,6 +9,15 @@ const flightReducer = (
       return { ...state, loading: false, error: false, flights: action.data }
     case 'RETRIEVING_FAIL':
       return { ...state, loading: false, error: true }
+    case 'FLIGHT_UPDATING_START':
+      return { ...state, loading: true, error: false }
+    case 'FLIGHT_UPDATING_SUCCESS':
+      const flights = state.flights.map((flight: any) =>
+        flight.id == action.data.id ? { ...action.data } : flight
+      )
+      return { ...state, loading: false, error: false, flights: flights }
+    case 'FLIGHT_UPDATING_FAIL':
+      return { ...state, loading: false, error: true }
     default:
       return state
   }

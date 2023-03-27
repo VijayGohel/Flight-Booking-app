@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { Button, Form } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import { updateFlight } from '../../actions/FlightAction'
 
 export interface IFlight {
   id: string
@@ -18,9 +20,10 @@ export interface IFlight {
 const FlightDetailsModal = (props: any) => {
   const { show, closeModal } = props
   const [flight, setFlight] = useState<IFlight>()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    const temp = props.flight
+    const temp = JSON.parse(JSON.stringify(props.flight))
     const ancillaryServicesTemp = temp.ancillaryServices.map((item: string) => {
       return {
         value: item,
@@ -82,8 +85,16 @@ const FlightDetailsModal = (props: any) => {
         })
       }
     )
-    if (!hasError) {
-      // dispatch(updatePassenger(passenger?.id, passenger) as any)
+    if (!hasError) {    
+      const ancillaryServicesTemp = temp.ancillaryServices.map((item: any) => item.value)
+      const specialMealsTemp = temp.specialMeals.map((item: any) => item.value)
+      const shoppingItemsTemp = temp.shoppingItems.map((item: any) => item.value)
+      
+      temp.ancillaryServices = ancillaryServicesTemp
+      temp.specialMeals = specialMealsTemp
+      temp.shoppingItems = shoppingItemsTemp
+
+      dispatch(updateFlight(temp?.id, temp) as any)
       closeModal()
     } else setFlight(temp)
   }
