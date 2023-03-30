@@ -23,7 +23,9 @@ const passengerReducer = (
       return { ...state, loading: true, error: false }
     case 'CHECKIN_SUCCESS':
       passengers = state.passengers.map((passenger: any) =>
-        passenger.id == action.data.id ? { ...action.data } : passenger
+        passenger.id == action.data.id
+          ? { ...passenger, ...action.data }
+          : passenger
       )
       return { ...state, loading: false, error: false, passengers: passengers }
     case 'CHECKIN_FAIL':

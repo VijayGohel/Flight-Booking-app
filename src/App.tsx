@@ -5,6 +5,8 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home/Home'
 import Flight from './components/Flight/Flight'
 import NavBar from './components/NavBar/NavBar'
+import FlightsList from './components/FlightsList/FlightsList'
+import PassengersList from './components/PassengersList/PassengersList'
 
 export const App = () => {
   const user = useSelector((state: any) => state.authReducer.authData)
@@ -32,6 +34,14 @@ export const App = () => {
         <Route
           path="/flight/:flightId"
           element={user ? <Flight /> : <Navigate to="/auth" />}
+        />
+        <Route
+          path="/flights"
+          element={user ? <FlightsList /> : <Navigate to="/auth" />}
+        />
+        <Route
+          path="/passengers"
+          element={user ? <PassengersList /> : <Navigate to="/auth" />}
         />
       </Routes>
     </div>

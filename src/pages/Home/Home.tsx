@@ -1,14 +1,13 @@
-import React from 'react'
-import { Button } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
+import AdminDashboard from '../../components/AdminDashboard/AdminDashboard'
 import FlightsList from '../../components/FlightsList/FlightsList'
-import NavBar from '../../components/NavBar/NavBar'
 
 const Home = () => {
-  return (
-    <>
-      <FlightsList />
-    </>
-  )
+  const isAdmin: boolean = useSelector(
+    (state: any) => state.authReducer.authData
+  ).user.isAdmin
+
+  return <>{isAdmin ? <AdminDashboard /> : <FlightsList />}</>
 }
 
 export default Home

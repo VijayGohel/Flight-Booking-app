@@ -17,6 +17,7 @@ const PassengerDetailsModal = (props: any) => {
     mobileNo: 0,
     passport: '',
     seatNo: '',
+    flightId: '',
     ancillaryServices: [],
     shoppingItems: [],
     specialMeal: '',

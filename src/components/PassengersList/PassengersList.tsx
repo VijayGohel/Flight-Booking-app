@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Button, Table, Modal } from 'react-bootstrap'
+import { Button, Table, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { getFlightsList } from '../../actions/FlightAction'
 import { checkIn, getPassengersList } from '../../actions/PassengerAction'
 import { getTickets } from '../../api/TicketRequest'
+import { IFlight } from '../FlightDetailsModal/FlightDetailsModal'
 import PassengerDetailsModal from '../PassengerDetailsModal/PassengerDetailsModal'
 
 export interface IPassenger {
@@ -16,6 +18,7 @@ export interface IPassenger {
   passport: string
   address: string
   seatNo: string
+  flightId: string
   ancillaryServices: string[]
   specialMeal: string
   shoppingItems: string[]
@@ -33,12 +36,16 @@ const PassengersList = () => {
   const { passengers, loading } = useSelector(
     (state: any) => state.passengerReducer
   )
-  const currentFlight = useSelector(
-    (state: any) => state.flightReducer
-  ).flights.filter((flight: any) => flight.id == flightId)[0]
+  const [currentFlight, setCurrentFlight] = useState<IFlight>({} as IFlight)
+  const flights = useSelector((state: any) => state.flightReducer).flights
+
+  const isAdmin: boolean = useSelector(
+    (state: any) => state.authReducer.authData
+  ).user.isAdmin
 
   useEffect(() => {
     getFlightTickets(flightId as string)
+    dispatch(getFlightsList() as any)
   }, [])
 
   const getFlightTickets = async (flightId: string) => {
@@ -51,19 +58,25 @@ const PassengersList = () => {
   }
 
   return (
-    <div>
+    <Container>
       {loading ? (
         'Fetching Passengers...'
       ) : !passengers ? (
         'No Passengers available for this flight.'
       ) : (
-        <Table striped bordered hover className="table">
+        <Table
+          striped
+          bordered
+          hover
+          className={`table ${flightId ? '' : 'mt-5'}`}
+        >
           <thead>
             <tr>
               <th>#</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Gender</th>
+              <th>Flight No.</th>
               <th>Seat No</th>
               <th>Status</th>
               <th></th>
@@ -76,26 +89,40 @@ const PassengersList = () => {
                 <td>{passenger.firstName}</td>
                 <td>{passenger.lastName}</td>
                 <td>{passenger.gender}</td>
+                <td>
+                  {
+                    flights.filter(
+                      (flight: any) => flight.id == passenger.flightId
+                    )[0]?.flightNo
+                  }
+                </td>
                 <td>{passenger.seatNo}</td>
                 <td>
                   {passenger.isCheckedIn ? 'Checked-In' : 'Not Checked-In'}
                 </td>
                 <td>
-                  <Button
-                    className="btn m-2 d-inline-block"
-                    size="sm"
-                    onClick={() =>
-                      dispatch(
-                        checkIn(passenger.id, !passenger.isCheckedIn) as any
-                      )
-                    }
-                  >
-                    {!passenger.isCheckedIn ? 'Check-In' : 'Undo Check-In'}
-                  </Button>
+                  {!isAdmin && (
+                    <Button
+                      className="btn m-2 d-inline-block"
+                      size="sm"
+                      onClick={() =>
+                        dispatch(
+                          checkIn(passenger.id, !passenger.isCheckedIn) as any
+                        )
+                      }
+                    >
+                      {!passenger.isCheckedIn ? 'Check-In' : 'Undo Check-In'}
+                    </Button>
+                  )}
                   <Button
                     className="btn m-2 d-inline-block"
                     size="sm"
                     onClick={() => {
+                      setCurrentFlight(
+                        flights.filter(
+                          (flight: any) => flight.id == passenger.flightId
+                        )[0]
+                      )
                       setShowDetails(!showDetails)
                       setSelectedPassenger(passenger)
                     }}
@@ -116,7 +143,7 @@ const PassengersList = () => {
           closeModal={() => setShowDetails(false)}
         />
       )}
-    </div>
+    </Container>
   )
 }
 
