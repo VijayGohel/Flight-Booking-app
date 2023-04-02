@@ -8,6 +8,7 @@ export const getPassengersList = (tickets: any[]) => async (dispatch: any) => {
       const data = await PassengerApi.getPassengersList(ticket.passengerId)
       data.data.seatNo = ticket.seatNo
       data.data.flightId = ticket.flightId
+      data.data.ticketId = ticket.id
       return data.data
     })
     Promise.all(passengersList).then((res) =>

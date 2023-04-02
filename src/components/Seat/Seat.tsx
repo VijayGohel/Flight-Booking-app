@@ -5,12 +5,12 @@ const Seat = (props: any) => {
     props
 
   const getSeatColor = () => {
-    return specialMeal
+    return selected
+      ? 'green'
+      : specialMeal
       ? 'orange'
       : disableSeat
       ? 'blue'
-      : selected
-      ? 'green'
       : 'gray'
   }
 

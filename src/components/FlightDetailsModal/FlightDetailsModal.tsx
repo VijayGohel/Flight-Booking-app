@@ -13,6 +13,7 @@ export interface IFlight {
   to: string
   departureDate: string
   arrivalDate: string
+  selectedSeats: []
   ancillaryServices: []
   specialMeals: []
   shoppingItems: []
@@ -303,7 +304,7 @@ const FlightDetailsModal = (props: any) => {
           </Form.Group>
         </Form>
 
-        <SeatMap />
+        <SeatMap flightId={flight?.id}/>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

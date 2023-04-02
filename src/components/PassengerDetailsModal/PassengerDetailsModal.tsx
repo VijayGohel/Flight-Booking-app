@@ -5,6 +5,7 @@ import { Row } from 'react-bootstrap'
 import { Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { updatePassenger } from '../../actions/PassengerAction'
+import { updateTickets } from '../../api/TicketRequest'
 import { IPassenger } from '../PassengersList/PassengersList'
 import SeatMap from '../SeatMap/SeatMap'
 
@@ -95,6 +96,8 @@ const PassengerDetailsModal = (props: any) => {
       }
     })
     if (!hasError) {
+      updateTickets(passenger.ticketId, passenger.seatNo)
+      delete passenger.seatNo
       dispatch(updatePassenger(passenger?.id, passenger) as any)
       closeModal()
     } else setValidated(errors)
@@ -384,7 +387,7 @@ const PassengerDetailsModal = (props: any) => {
           </Form.Group>
         </Form>
 
-        <SeatMap canSelect getSelectedSeat={getSelectedSeat} />
+        <SeatMap canSelect getSelectedSeat={getSelectedSeat} flightId={passenger?.flightId}/>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

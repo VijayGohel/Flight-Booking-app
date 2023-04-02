@@ -17,14 +17,24 @@ export interface IPassenger {
   gender: 'Male' | 'Female'
   passport: string
   address: string
-  seatNo: string
+  seatNo?: string
   flightId: string
+  ticketId: string
   ancillaryServices: string[]
   specialMeal: string
   shoppingItems: string[]
   isCheckedIn: boolean
   isWheelChair: boolean
   iswithInfants: boolean
+}
+
+export const getFlightTickets = async (flightId: string, dispatch: any) => {
+  try {
+    const { data } = await getTickets(flightId)
+    dispatch(getPassengersList(data) as any)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const PassengersList = () => {
@@ -44,18 +54,9 @@ const PassengersList = () => {
   ).user.isAdmin
 
   useEffect(() => {
-    getFlightTickets(flightId as string)
+    getFlightTickets(flightId as string, dispatch)
     dispatch(getFlightsList() as any)
   }, [])
-
-  const getFlightTickets = async (flightId: string) => {
-    try {
-      const { data } = await getTickets(flightId)
-      dispatch(getPassengersList(data) as any)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   return (
     <Container>

@@ -1,16 +1,41 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Col } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { IFlight } from '../FlightDetailsModal/FlightDetailsModal'
+import { getFlightTickets, IPassenger } from '../PassengersList/PassengersList'
 import Seat from '../Seat/Seat'
 
 const SeatMap = (props: any) => {
-  const { canSelect, getSelectedSeat } = props
-  const [flightSeats, setFlightSeats] = useState([
-    { seatNo: '1A', specialMeal: false },
-    { seatNo: '3C', specialMeal: false },
-    { seatNo: '2D', specialMeal: true },
-  ])
-  const [selectedSeat, setSelectedSeat] = useState()
+  const { canSelect, getSelectedSeat, flightId } = props
+  const [flightSeats, setFlightSeats] = useState<string[]>([])
+  const [selectedSeat, setSelectedSeat] = useState<string>()
+  const currentFlight: IFlight = useSelector(
+    (state: any) => state.flightReducer
+  ).flights.filter((flight: any) => flight.id == flightId)[0]
+  const { passengers } = useSelector(
+    (state: any) => state.passengerReducer
+  )
+  const [specialMeals, setSpecialMeals] = useState<string[]>([])
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    // getFlightById(flightId)
+    // getFlightById(flightId).then((res)=>console.log(res))
+    
+    // getFlightTickets(flightId as string, dispatch)
+
+    const temp = passengers.map((passenger: IPassenger)=>{
+      if(passenger.specialMeal != "none"){
+        return passenger.seatNo
+      }
+    })
+    setSpecialMeals(temp);
+  }, [passengers])
+
+  useEffect(()=>{
+    setFlightSeats(currentFlight?.selectedSeats)
+  }, [currentFlight])
 
   const toggleSeat = (e: any) => {
     const currSeat = e.target.parentNode.childNodes[1].innerText
@@ -38,12 +63,12 @@ const SeatMap = (props: any) => {
               value={currSeat}
               selected={currSeat == selectedSeat ? true : false}
               disableSeat={
-                flightSeats.find((seat) => seat.seatNo == currSeat)
+                flightSeats?.find((seat: string) => seat == currSeat)
                   ? true
                   : false
               }
               specialMeal={
-                flightSeats.find((seat) => seat.seatNo == currSeat)?.specialMeal
+                specialMeals?.find((seat) => seat == currSeat)
                   ? true
                   : false
               }
@@ -87,6 +112,13 @@ const SeatMap = (props: any) => {
             ></i>
             <div>Available</div>
           </div>
+          {canSelect && <div className="d-flex mt-2">
+            <i
+              className={`fa-solid fa-couch seat me-2`}
+              style={{ color: 'green' }}
+            ></i>
+            <div>selected</div>
+          </div>}
         </Col>
       </Row>
     </>
