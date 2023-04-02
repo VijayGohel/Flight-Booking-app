@@ -16,13 +16,15 @@ const NavBar = () => {
     <>
       <Navbar bg="light" variant="light" className="navbar">
         <Container>
-          <Navbar.Brand onClick={()=>navigate("/")} className="nav-brand">
+          <Navbar.Brand onClick={() => navigate('/')} className="nav-brand">
             <i className="fa-solid fa-plane"></i>
           </Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link onClick={()=>navigate("/")}>Home</Nav.Link>
-            <Nav.Link onClick={()=>navigate("/flights")}>Flights</Nav.Link>
-            <Nav.Link onClick={()=>navigate("/passengers")}>Passengers</Nav.Link>
+            <Nav.Link onClick={() => navigate('/')}>Home</Nav.Link>
+            <Nav.Link onClick={() => navigate('/flights')}>Flights</Nav.Link>
+            <Nav.Link onClick={() => navigate('/passengers')}>
+              Passengers
+            </Nav.Link>
             <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
           </Nav>
         </Container>
