@@ -1,8 +1,11 @@
 .seat {
-    font-size: 30px;
-    cursor: pointer;
+  font-size: 28px;
 
-    &.disabled-seat {
-        pointer-events: none;
-    }
+  &.can-select {
+    cursor: pointer;
+  }
+
+  &.disabled-seat {
+    pointer-events: none;
+  }
 }

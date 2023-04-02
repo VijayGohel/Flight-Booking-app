@@ -6,6 +6,7 @@ import { Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { updatePassenger } from '../../actions/PassengerAction'
 import { IPassenger } from '../PassengersList/PassengersList'
+import SeatMap from '../SeatMap/SeatMap'
 
 const PassengerDetailsModal = (props: any) => {
   const initialValues: IPassenger = {
@@ -97,6 +98,10 @@ const PassengerDetailsModal = (props: any) => {
       dispatch(updatePassenger(passenger?.id, passenger) as any)
       closeModal()
     } else setValidated(errors)
+  }
+
+  const getSelectedSeat = (selectedSeat: string) => {
+    setPassenger({ ...passenger, seatNo: selectedSeat })
   }
 
   return (
@@ -378,6 +383,8 @@ const PassengerDetailsModal = (props: any) => {
             />
           </Form.Group>
         </Form>
+
+        <SeatMap canSelect getSelectedSeat={getSelectedSeat} />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

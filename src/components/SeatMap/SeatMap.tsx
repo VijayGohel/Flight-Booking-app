@@ -3,11 +3,20 @@ import { Col } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
 import Seat from '../Seat/Seat'
 
-const SeatMap = () => {
-  const [flightSeats, setFlightSeats] = useState([{seatNo: '1A', specialMeal: false}, {seatNo: '3C', specialMeal: false}, {seatNo: '2D', specialMeal: true}])
+const SeatMap = (props: any) => {
+  const { canSelect, getSelectedSeat } = props
+  const [flightSeats, setFlightSeats] = useState([
+    { seatNo: '1A', specialMeal: false },
+    { seatNo: '3C', specialMeal: false },
+    { seatNo: '2D', specialMeal: true },
+  ])
+  const [selectedSeat, setSelectedSeat] = useState()
 
   const toggleSeat = (e: any) => {
-    console.log(e.target.parentNode.childNodes[1].innerText)
+    const currSeat = e.target.parentNode.childNodes[1].innerText
+    console.log(currSeat)
+    setSelectedSeat(currSeat)
+    getSelectedSeat(currSeat)
   }
 
   const displaySeats = () => {
@@ -20,16 +29,26 @@ const SeatMap = () => {
         const currSeat = JSON.stringify(row) + String.fromCharCode(64 + col)
         seatsRow.push(
           <div
-            className={`text-center seat-row d-inline-block m-2 ${
+            className={`text-center seat-row d-inline-block m-1 ${
               col == 3 ? 'me-4' : ''
             }`}
             key={currSeat}
           >
             <Seat
               value={currSeat}
-              disableSeat={flightSeats.find(seat=>seat.seatNo==currSeat) ? true : false}
-              specialMeal={flightSeats.find(seat=>seat.seatNo==currSeat)?.specialMeal ? true : false}
+              selected={currSeat == selectedSeat ? true : false}
+              disableSeat={
+                flightSeats.find((seat) => seat.seatNo == currSeat)
+                  ? true
+                  : false
+              }
+              specialMeal={
+                flightSeats.find((seat) => seat.seatNo == currSeat)?.specialMeal
+                  ? true
+                  : false
+              }
               onClick={toggleSeat}
+              canSelect={canSelect}
             />
           </div>
         )
@@ -43,20 +62,29 @@ const SeatMap = () => {
   return (
     <>
       <Row className="text-center">
-        <Col xs={12} sm={8}>
+        <Col sm={12} md={8}>
           {displaySeats()}
         </Col>
-        <Col xs={12} sm={4}>
-          <div className='d-flex mt-2'>
-            <i className={`fa-solid fa-couch seat me-2`} style={{color: 'orange'}}></i>
+        <Col sm={12} md={4}>
+          <div className="d-flex mt-2">
+            <i
+              className={`fa-solid fa-couch seat me-2`}
+              style={{ color: 'orange' }}
+            ></i>
             <div>Special Meal</div>
           </div>
-          <div className='d-flex mt-2'>
-            <i className={`fa-solid fa-couch seat me-2`} style={{color: 'blue'}}></i>
+          <div className="d-flex mt-2">
+            <i
+              className={`fa-solid fa-couch seat me-2`}
+              style={{ color: 'blue' }}
+            ></i>
             <div>Booked</div>
           </div>
-          <div className='d-flex mt-2'>
-            <i className={`fa-solid fa-couch seat me-2`} style={{color: 'gray'}}></i>
+          <div className="d-flex mt-2">
+            <i
+              className={`fa-solid fa-couch seat me-2`}
+              style={{ color: 'gray' }}
+            ></i>
             <div>Available</div>
           </div>
         </Col>

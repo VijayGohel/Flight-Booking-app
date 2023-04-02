@@ -3,6 +3,7 @@ import { Col, Modal, Row } from 'react-bootstrap'
 import { Button, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateFlight } from '../../actions/FlightAction'
+import SeatMap from '../SeatMap/SeatMap'
 
 export interface IFlight {
   id: string
@@ -301,6 +302,8 @@ const FlightDetailsModal = (props: any) => {
             ))}
           </Form.Group>
         </Form>
+
+        <SeatMap />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
