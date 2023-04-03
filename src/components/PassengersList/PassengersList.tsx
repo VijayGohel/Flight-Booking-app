@@ -85,7 +85,7 @@ const PassengersList = () => {
           </thead>
           <tbody>
             {passengers.map((passenger: IPassenger) => (
-              <tr key={passenger.id}>
+              <tr key={passenger.ticketId}>
                 <td>{passenger.id}</td>
                 <td>{passenger.firstName}</td>
                 <td>{passenger.lastName}</td>
