@@ -4,6 +4,7 @@ import { Form } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
 import { Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { updateFlight } from '../../actions/FlightAction'
 import { updatePassenger } from '../../actions/PassengerAction'
 import { updateTickets } from '../../api/TicketRequest'
@@ -28,6 +29,7 @@ const PassengerDetailsModal = (props: any) => {
     iswithInfants: false,
     isCheckedIn: false,
     id: '',
+    ticketId: ''
   }
   const { show, flight, closeModal } = props
   const [passenger, setPassenger] = useState<IPassenger>(initialValues)
@@ -43,6 +45,7 @@ const PassengerDetailsModal = (props: any) => {
     (state: any) => state.authReducer.authData
   ).user.isAdmin
   const dispatch = useDispatch()
+  const { flightId } = useParams()
 
   useEffect(() => {
     setPassenger(props.passenger)
@@ -105,7 +108,7 @@ const PassengerDetailsModal = (props: any) => {
         delete passenger.seatNo
         dispatch(updatePassenger(passenger?.id, passenger) as any)
         dispatch(updateFlight(flight.id, flight) as any)
-        getFlightTickets(flight.id, dispatch)
+        getFlightTickets(flightId, dispatch)
       })
       closeModal()
     } else setValidated(errors)
@@ -396,8 +399,8 @@ const PassengerDetailsModal = (props: any) => {
         </Form>
 
         <SeatMap
-          prevSelectedSeat={props.passenger.seatNo}
-          curSelectedSeat={passenger?.seatNo}
+          prevSelectedSeat={!isAdmin ? props.passenger.seatNo : undefined}
+          curSelectedSeat={!isAdmin ? passenger?.seatNo : undefined}
           getSelectedSeat={getSelectedSeat}
           currentFlight={flight}
         />

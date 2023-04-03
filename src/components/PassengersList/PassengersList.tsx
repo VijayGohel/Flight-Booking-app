@@ -28,7 +28,7 @@ export interface IPassenger {
   iswithInfants: boolean
 }
 
-export const getFlightTickets = async (flightId: string, dispatch: any) => {
+export const getFlightTickets = async (flightId: string | undefined, dispatch: any) => {
   try {
     const { data } = await getTickets(flightId)
     dispatch(getPassengersList(data) as any)
@@ -84,9 +84,9 @@ const PassengersList = () => {
             </tr>
           </thead>
           <tbody>
-            {passengers.map((passenger: IPassenger) => (
-              <tr key={passenger.ticketId}>
-                <td>{passenger.id}</td>
+            {passengers.map((passenger: IPassenger, index: number) => (
+              <tr key={passenger.ticketId+" "+index}>
+                <td>{index+1}</td>
                 <td>{passenger.firstName}</td>
                 <td>{passenger.lastName}</td>
                 <td>{passenger.gender}</td>
