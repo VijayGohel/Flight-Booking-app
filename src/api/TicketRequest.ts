@@ -8,4 +8,4 @@ export const getTickets = (flightId?: string) =>
 export const updateTickets = (
   ticketId: string | undefined,
   seatNo: string | undefined
-) => API.patch(`/tickets/${ticketId}`, {seatNo: seatNo})
+) => API.patch(`/tickets/${ticketId}`, { seatNo: seatNo })

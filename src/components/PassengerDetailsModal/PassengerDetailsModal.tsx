@@ -4,6 +4,7 @@ import { Form } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
 import { Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
+import { updateFlight } from '../../actions/FlightAction'
 import { updatePassenger } from '../../actions/PassengerAction'
 import { updateTickets } from '../../api/TicketRequest'
 import { getFlightTickets, IPassenger } from '../PassengersList/PassengersList'
@@ -96,9 +97,14 @@ const PassengerDetailsModal = (props: any) => {
       }
     })
     if (!hasError) {
-      updateTickets(passenger.ticketId, passenger.seatNo).then((res)=>{
+      updateTickets(passenger.ticketId, passenger.seatNo).then((res) => {
+        flight.selectedSeats = flight.selectedSeats.filter(
+          (seat: string) => seat != props.passenger.seatNo
+        )
+        flight.selectedSeats.push(passenger?.seatNo)
         delete passenger.seatNo
         dispatch(updatePassenger(passenger?.id, passenger) as any)
+        dispatch(updateFlight(flight.id, flight) as any)
         getFlightTickets(flight.id, dispatch)
       })
       closeModal()
@@ -389,7 +395,12 @@ const PassengerDetailsModal = (props: any) => {
           </Form.Group>
         </Form>
 
-        <SeatMap prevSelectedSeat={props.passenger.seatNo} curSelectedSeat={passenger?.seatNo} getSelectedSeat={getSelectedSeat} flightId={passenger?.flightId}/>
+        <SeatMap
+          prevSelectedSeat={props.passenger.seatNo}
+          curSelectedSeat={passenger?.seatNo}
+          getSelectedSeat={getSelectedSeat}
+          currentFlight={flight}
+        />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

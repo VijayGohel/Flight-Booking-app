@@ -304,7 +304,7 @@ const FlightDetailsModal = (props: any) => {
           </Form.Group>
         </Form>
 
-        <SeatMap flightId={flight?.id}/>
+        <SeatMap currentFlight={flight} />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

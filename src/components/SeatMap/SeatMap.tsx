@@ -6,24 +6,25 @@ import { IPassenger } from '../PassengersList/PassengersList'
 import Seat from '../Seat/Seat'
 
 const SeatMap = (props: any) => {
-  const { prevSelectedSeat, curSelectedSeat, getSelectedSeat, flightId } = props
+  const { prevSelectedSeat, curSelectedSeat, getSelectedSeat, currentFlight } =
+    props
   const [flightSeats, setFlightSeats] = useState<string[]>([])
-  const currentFlight: IFlight = useSelector(
-    (state: any) => state.flightReducer
-  ).flights.filter((flight: any) => flight.id == flightId)[0]
-  const { passengers } = useSelector(
-    (state: any) => state.passengerReducer
-  )
+  const { passengers } = useSelector((state: any) => state.passengerReducer)
   const [specialMeals, setSpecialMeals] = useState<string[]>([])
 
-  useEffect(()=>{
-    const temp = passengers.filter((passenger: IPassenger)=>passenger.specialMeal!='none')
-      .map((passenger: IPassenger)=>passenger.seatNo)
-    setSpecialMeals(temp);
-  }, [passengers])
+  useEffect(() => {
+    const temp = passengers
+      .filter((passenger: IPassenger) => passenger.specialMeal != 'none')
+      .map((passenger: IPassenger) => passenger.seatNo)
+    setSpecialMeals(temp)
+  }, [])
 
-  useEffect(()=>{
-    setFlightSeats(currentFlight?.selectedSeats)
+  useEffect(() => {
+    setFlightSeats(
+      currentFlight?.selectedSeats.filter(
+        (seat: string) => seat != prevSelectedSeat
+      )
+    )
   }, [currentFlight])
 
   const toggleSeat = (e: any) => {
@@ -55,12 +56,14 @@ const SeatMap = (props: any) => {
                   : false
               }
               specialMeal={
-                specialMeals?.find((seat: string) => seat == currSeat && seat != prevSelectedSeat)
+                specialMeals?.find(
+                  (seat: string) => seat == currSeat && seat != prevSelectedSeat
+                )
                   ? true
                   : false
               }
               onClick={toggleSeat}
-              canSelect={prevSelectedSeat? true : false}
+              canSelect={prevSelectedSeat ? true : false}
             />
           </div>
         )
@@ -99,13 +102,15 @@ const SeatMap = (props: any) => {
             ></i>
             <div>Available</div>
           </div>
-          {prevSelectedSeat && <div className="d-flex mt-2">
-            <i
-              className={`fa-solid fa-couch seat me-2`}
-              style={{ color: 'green' }}
-            ></i>
-            <div>selected</div>
-          </div>}
+          {prevSelectedSeat && (
+            <div className="d-flex mt-2">
+              <i
+                className={`fa-solid fa-couch seat me-2`}
+                style={{ color: 'green' }}
+              ></i>
+              <div>selected</div>
+            </div>
+          )}
         </Col>
       </Row>
     </>
