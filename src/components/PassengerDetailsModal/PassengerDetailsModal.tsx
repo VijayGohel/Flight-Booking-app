@@ -29,7 +29,7 @@ const PassengerDetailsModal = (props: any) => {
     iswithInfants: false,
     isCheckedIn: false,
     id: '',
-    ticketId: ''
+    ticketId: '',
   }
   const { show, flight, closeModal } = props
   const [passenger, setPassenger] = useState<IPassenger>(initialValues)

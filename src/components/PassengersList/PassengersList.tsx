@@ -30,10 +30,24 @@ export interface IPassenger {
   iswithInfants: boolean
 }
 
-const adminFilter = ["All", "Missing Passport", "Missing Address", "Missing Date of Birth"]
-const staffFilter = ["All", "Chcked-In", "Not Checked-In", "Wheel Chair", "Is With Infant"]
+const adminFilter = [
+  'All',
+  'Missing Passport',
+  'Missing Address',
+  'Missing Date of Birth',
+]
+const staffFilter = [
+  'All',
+  'Chcked-In',
+  'Not Checked-In',
+  'Wheel Chair',
+  'Is With Infant',
+]
 
-export const getFlightTickets = async (flightId: string | undefined, dispatch: any) => {
+export const getFlightTickets = async (
+  flightId: string | undefined,
+  dispatch: any
+) => {
   try {
     const { data } = await getTickets(flightId)
     dispatch(getPassengersList(data) as any)
@@ -53,7 +67,9 @@ const PassengersList = () => {
   )
   const [currentFlight, setCurrentFlight] = useState<IFlight>({} as IFlight)
   const flights = useSelector((state: any) => state.flightReducer).flights
-  const [currentFilter, setCurrentFilter] = useState<string>('All');
+  const [currentFilter, setCurrentFilter] = useState<string>('All')
+  const [filteredPassengers, setFilteredPassengers] =
+    useState<IPassenger[]>(passengers)
   const isAdmin: boolean = useSelector(
     (state: any) => state.authReducer.authData
   ).user.isAdmin
@@ -65,6 +81,54 @@ const PassengersList = () => {
 
   const passengersFilter = isAdmin ? adminFilter : staffFilter
 
+  const onSelectFilter = (key: any, event: object) => {
+    let tempPassengers: IPassenger[] = []
+    switch (key) {
+      case 'All':
+        tempPassengers = passengers.filter((passenger: IPassenger) => passenger)
+        break
+      case 'Missing Passport':
+        tempPassengers = passengers.filter(
+          (passenger: IPassenger) => !passenger.passport
+        )
+        break
+      case 'Missing Address':
+        tempPassengers = passengers.filter(
+          (passenger: IPassenger) => !passenger.address
+        )
+        break
+      case 'Missing Date of Birth':
+        tempPassengers = passengers.filter(
+          (passenger: IPassenger) => !passenger.dateOfBirth
+        )
+        break
+      case 'Chcked-In':
+        tempPassengers = passengers.filter(
+          (passenger: IPassenger) => passenger.isCheckedIn
+        )
+        break
+      case 'Not Checked-In':
+        tempPassengers = passengers.filter(
+          (passenger: IPassenger) => !passenger.isCheckedIn
+        )
+        break
+      case 'Wheel Chair':
+        tempPassengers = passengers.filter(
+          (passenger: IPassenger) => passenger.isWheelChair
+        )
+        break
+      case 'Is With Infant':
+        tempPassengers = passengers.filter(
+          (passenger: IPassenger) => passenger.iswithInfants
+        )
+        break
+      default:
+        break
+    }
+    setFilteredPassengers(tempPassengers)
+    setCurrentFilter(key)
+  }
+
   return (
     <Container>
       {loading ? (
@@ -73,89 +137,99 @@ const PassengersList = () => {
         'No Passengers available for this flight.'
       ) : (
         <>
-        <Dropdown
+          <Dropdown
             as={ButtonGroup}
-            id={"passenger-filters"}
-            onSelect={(key: any, e)=>setCurrentFilter(key)}
-            className={"mt-5"}
+            id={'passenger-filters'}
+            onSelect={onSelectFilter}
+            className={`${flightId ? '' : 'mt-5'} mb-3`}
           >
-            <Dropdown.Toggle id="dropdown-title">{currentFilter}</Dropdown.Toggle>
+            <Dropdown.Toggle id="dropdown-title">
+              {currentFilter}
+            </Dropdown.Toggle>
             <Dropdown.Menu>
-              {passengersFilter.map((filter: string)=>(
-                <Dropdown.Item eventKey={filter} key={filter} active={currentFilter==filter}>{filter}</Dropdown.Item>
+              {passengersFilter.map((filter: string) => (
+                <Dropdown.Item
+                  eventKey={filter}
+                  key={filter}
+                  active={currentFilter == filter}
+                >
+                  {filter}
+                </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
-        <Table
-          striped
-          bordered
-          hover
-          className={`table ${flightId ? '' : 'mt-3'}`}
-        >
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Gender</th>
-              <th>Flight No.</th>
-              <th>Seat No</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {passengers.map((passenger: IPassenger, index: number) => (
-              <tr key={passenger.ticketId+" "+index}>
-                <td>{index+1}</td>
-                <td>{passenger.firstName}</td>
-                <td>{passenger.lastName}</td>
-                <td>{passenger.gender}</td>
-                <td>
-                  {
-                    flights.filter(
-                      (flight: any) => flight.id == passenger.flightId
-                    )[0]?.flightNo
-                  }
-                </td>
-                <td>{passenger.seatNo}</td>
-                <td>
-                  {passenger.isCheckedIn ? 'Checked-In' : 'Not Checked-In'}
-                </td>
-                <td>
-                  {!isAdmin && (
-                    <Button
-                      className="btn m-2 d-inline-block"
-                      size="sm"
-                      onClick={() =>
-                        dispatch(
-                          checkIn(passenger.id, !passenger.isCheckedIn) as any
-                        )
-                      }
-                    >
-                      {!passenger.isCheckedIn ? 'Check-In' : 'Undo Check-In'}
-                    </Button>
-                  )}
-                  <Button
-                    className="btn m-2 d-inline-block"
-                    size="sm"
-                    onClick={() => {
-                      setCurrentFlight(
+          <Table striped bordered hover className={'table'}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Gender</th>
+                <th>Flight No.</th>
+                <th>Seat No</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPassengers.map(
+                (passenger: IPassenger, index: number) => (
+                  <tr key={passenger.ticketId + ' ' + index}>
+                    <td>{index + 1}</td>
+                    <td>{passenger.firstName}</td>
+                    <td>{passenger.lastName}</td>
+                    <td>{passenger.gender}</td>
+                    <td>
+                      {
                         flights.filter(
                           (flight: any) => flight.id == passenger.flightId
-                        )[0]
-                      )
-                      setShowDetails(!showDetails)
-                      setSelectedPassenger(passenger)
-                    }}
-                  >
-                    Details
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+                        )[0]?.flightNo
+                      }
+                    </td>
+                    <td>{passenger.seatNo}</td>
+                    <td>
+                      {passenger.isCheckedIn ? 'Checked-In' : 'Not Checked-In'}
+                    </td>
+                    <td>
+                      {!isAdmin && (
+                        <Button
+                          className="btn m-2 d-inline-block"
+                          size="sm"
+                          onClick={() =>
+                            dispatch(
+                              checkIn(
+                                passenger.id,
+                                !passenger.isCheckedIn
+                              ) as any
+                            )
+                          }
+                        >
+                          {!passenger.isCheckedIn
+                            ? 'Check-In'
+                            : 'Undo Check-In'}
+                        </Button>
+                      )}
+                      <Button
+                        className="btn m-2 d-inline-block"
+                        size="sm"
+                        onClick={() => {
+                          setCurrentFlight(
+                            flights.filter(
+                              (flight: any) => flight.id == passenger.flightId
+                            )[0]
+                          )
+                          setShowDetails(!showDetails)
+                          setSelectedPassenger(passenger)
+                        }}
+                      >
+                        Details
+                      </Button>
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </Table>
         </>
       )}
       {showDetails && (
