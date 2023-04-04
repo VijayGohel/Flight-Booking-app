@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { ButtonGroup } from 'react-bootstrap'
+import { Dropdown } from 'react-bootstrap'
 import { Button, Table, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -28,6 +30,9 @@ export interface IPassenger {
   iswithInfants: boolean
 }
 
+const adminFilter = ["All", "Missing Passport", "Missing Address", "Missing Date of Birth"]
+const staffFilter = ["All", "Chcked-In", "Not Checked-In", "Wheel Chair", "Is With Infant"]
+
 export const getFlightTickets = async (flightId: string | undefined, dispatch: any) => {
   try {
     const { data } = await getTickets(flightId)
@@ -48,7 +53,7 @@ const PassengersList = () => {
   )
   const [currentFlight, setCurrentFlight] = useState<IFlight>({} as IFlight)
   const flights = useSelector((state: any) => state.flightReducer).flights
-
+  const [currentFilter, setCurrentFilter] = useState<string>('All');
   const isAdmin: boolean = useSelector(
     (state: any) => state.authReducer.authData
   ).user.isAdmin
@@ -58,6 +63,8 @@ const PassengersList = () => {
     dispatch(getFlightsList() as any)
   }, [])
 
+  const passengersFilter = isAdmin ? adminFilter : staffFilter
+
   return (
     <Container>
       {loading ? (
@@ -65,11 +72,25 @@ const PassengersList = () => {
       ) : !passengers ? (
         'No Passengers available for this flight.'
       ) : (
+        <>
+        <Dropdown
+            as={ButtonGroup}
+            id={"passenger-filters"}
+            onSelect={(key: any, e)=>setCurrentFilter(key)}
+            className={"mt-5"}
+          >
+            <Dropdown.Toggle id="dropdown-title">{currentFilter}</Dropdown.Toggle>
+            <Dropdown.Menu>
+              {passengersFilter.map((filter: string)=>(
+                <Dropdown.Item eventKey={filter} key={filter} active={currentFilter==filter}>{filter}</Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
         <Table
           striped
           bordered
           hover
-          className={`table ${flightId ? '' : 'mt-5'}`}
+          className={`table ${flightId ? '' : 'mt-3'}`}
         >
           <thead>
             <tr>
@@ -135,6 +156,7 @@ const PassengersList = () => {
             ))}
           </tbody>
         </Table>
+        </>
       )}
       {showDetails && (
         <PassengerDetailsModal
