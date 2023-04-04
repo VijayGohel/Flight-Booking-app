@@ -40,6 +40,7 @@ const PassengerDetailsModal = (props: any) => {
     dateOfBirth: false,
     passport: false,
     address: false,
+    incompleteDetails: false,
   })
   const isAdmin: boolean = useSelector(
     (state: any) => state.authReducer.authData
@@ -71,6 +72,7 @@ const PassengerDetailsModal = (props: any) => {
       setPassenger({ ...passenger, [e?.target?.name]: e?.target?.value })
       const temp = { ...validated }
       temp[e?.target?.name] = false
+      temp.incompleteDetails = false
       setValidated(temp)
     }
   }
@@ -97,6 +99,7 @@ const PassengerDetailsModal = (props: any) => {
       if (!passenger[item] || passenger[item] == '') {
         hasError = true
         errors[item] = true
+        errors.incompleteDetails = true
       }
     })
     if (!hasError) {
@@ -404,6 +407,12 @@ const PassengerDetailsModal = (props: any) => {
           getSelectedSeat={getSelectedSeat}
           currentFlight={flight}
         />
+
+        {validated.incompleteDetails && (
+          <div className='text-end' style={{ color: '#dc3545'}}>
+            Please enter mandatory details.
+          </div>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

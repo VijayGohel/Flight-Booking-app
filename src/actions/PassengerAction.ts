@@ -35,12 +35,12 @@ export const updatePassenger =
 
 export const checkIn =
   (passengerId: string, checkIn: boolean) => async (dispatch: any) => {
-    dispatch({ type: 'CHECKIN_START' })
+    dispatch({ type: 'PASSENGER_UPDATING_START' })
     try {
       const { data } = await PassengerApi.checkinPassenger(passengerId, checkIn)
-      dispatch({ type: 'CHECKIN_SUCCESS', data: data })
+      dispatch({ type: 'PASSENGER_UPDATING_SUCCESS', data: data })
     } catch (error) {
       console.log(error)
-      dispatch({ type: 'CHECKIN_ERROR' })
+      dispatch({ type: 'PASSENGER_UPDATING_FAIL' })
     }
   }

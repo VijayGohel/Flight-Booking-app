@@ -13,9 +13,7 @@ export const App = () => {
 
   return (
     <div className="app">
-      <div className="blur"> </div>
-      <div className="blur"> </div>
-
+      <div className="app-bg"></div>
       {user && <NavBar />}
 
       <Routes>

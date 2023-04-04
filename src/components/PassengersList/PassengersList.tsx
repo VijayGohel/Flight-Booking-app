@@ -75,13 +75,17 @@ const PassengersList = () => {
   ).user.isAdmin
 
   useEffect(() => {
+    onSelectFilter(currentFilter)
+  }, [passengers])
+
+  useEffect(() => {
     getFlightTickets(flightId as string, dispatch)
     dispatch(getFlightsList() as any)
   }, [])
 
   const passengersFilter = isAdmin ? adminFilter : staffFilter
 
-  const onSelectFilter = (key: any, event: object) => {
+  const onSelectFilter = (key: any, event?: object) => {
     let tempPassengers: IPassenger[] = []
     switch (key) {
       case 'All':
@@ -195,13 +199,15 @@ const PassengersList = () => {
                         <Button
                           className="btn m-2 d-inline-block"
                           size="sm"
-                          onClick={() =>
+                          onClick={() => {
                             dispatch(
                               checkIn(
                                 passenger.id,
                                 !passenger.isCheckedIn
                               ) as any
                             )
+                            getFlightTickets(flightId as string, dispatch)
+                            }
                           }
                         >
                           {!passenger.isCheckedIn

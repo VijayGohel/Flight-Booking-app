@@ -6,7 +6,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate()
 
   return (
-    <Container>
+    <Container className='position-relative'>
       <Row>
         <Col sm={12} md={6} className="d-flex justify-content-center mt-5">
           <Button

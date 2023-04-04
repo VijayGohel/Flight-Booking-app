@@ -15,7 +15,6 @@ ReactDOM.render(
         </Routes>
       </BrowserRouter>
     </GoogleOAuthProvider>
-    ,
   </Provider>,
   document.getElementById('root')
 )
