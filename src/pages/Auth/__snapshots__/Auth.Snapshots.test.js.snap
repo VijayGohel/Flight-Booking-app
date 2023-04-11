@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`by default signup window should be displayed 1`] = `
+<div
+  className="container d-flex justify-content-center"
+>
+  <div
+    className="card login-container"
+  >
+    <h3
+      className="card-title"
+    >
+      Sign Up
+    </h3>
+    <form
+      className="signup-form"
+      onSubmit={[Function]}
+    >
+      <div
+        className="row"
+      >
+        <div
+          className="col-md-6 col-sm-12"
+        >
+          <input
+            className="form-input form-control"
+            id="first-name"
+            name="firstName"
+            onChange={[Function]}
+            placeholder="First Name"
+            required={true}
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="col-md-6 col-sm-12"
+        >
+          <input
+            className="form-input"
+            id="last-name"
+            name="lastName"
+            onChange={[Function]}
+            placeholder="Last Name"
+            required={true}
+            type="text"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        className="row"
+      >
+        <div
+          className="col-sm-12"
+        >
+          <input
+            className="form-input"
+            id="email"
+            name="email"
+            onChange={[Function]}
+            placeholder="Email"
+            required={true}
+            type="email"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        className="row"
+      >
+        <div
+          className="col-md-6 col-sm-12"
+        >
+          <input
+            className="form-input"
+            id="pass"
+            name="password"
+            onChange={[Function]}
+            placeholder="Password"
+            required={true}
+            type="password"
+            value=""
+          />
+        </div>
+        <div
+          className="col-md-6 col-sm-12"
+        >
+          <input
+            className="form-input"
+            id="confirm-pass"
+            name="confirmPass"
+            onChange={[Function]}
+            placeholder="Confirm Password"
+            required={true}
+            type="password"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        className="login-link"
+        onClick={[Function]}
+      >
+        <span>
+          Already have an account? Login!
+        </span>
+      </div>
+      <div
+        className="row justify-content-center mt-2"
+      >
+        <button
+          className="btn signup-btn"
+          type="submit"
+        >
+          Sign Up
+        </button>
+      </div>
+    </form>
+    <hr />
+    <div
+      className="row justify-content-center"
+    >
+      <button
+        className="btn signin-google"
+        disabled={false}
+        onClick={[Function]}
+      >
+        <i
+          className="fa-brands fa-google"
+        />
+        <div
+          style={
+            {
+              "width": "10px",
+            }
+          }
+        />
+        <span>
+          Login with Google
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
