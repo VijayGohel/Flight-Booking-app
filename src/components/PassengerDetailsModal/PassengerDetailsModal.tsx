@@ -71,7 +71,7 @@ const PassengerDetailsModal = (props: any) => {
     } else {
       setPassenger({ ...passenger, [e?.target?.name]: e?.target?.value })
       const temp = { ...validated }
-      temp[e?.target?.name] = false
+      temp[e?.target?.name as keyof typeof temp] = false
       temp.incompleteDetails = false
       setValidated(temp)
     }
@@ -95,10 +95,13 @@ const PassengerDetailsModal = (props: any) => {
       'dateOfBirth',
       'passport',
       'address',
-    ].map((item) => {
-      if (!passenger[item] || passenger[item] == '') {
+    ].map((item: any) => {
+      if (
+        !passenger[item as keyof IPassenger] ||
+        passenger[item as keyof IPassenger] == ''
+      ) {
         hasError = true
-        errors[item] = true
+        errors[item as keyof typeof errors] = true
         errors.incompleteDetails = true
       }
     })
@@ -109,6 +112,8 @@ const PassengerDetailsModal = (props: any) => {
         )
         flight.selectedSeats.push(passenger?.seatNo)
         delete passenger.seatNo
+        delete passenger.ticketId
+        delete passenger.flightId
         dispatch(updatePassenger(passenger?.id, passenger) as any)
         dispatch(updateFlight(flight.id, flight) as any)
         getFlightTickets(flightId, dispatch)
@@ -409,7 +414,7 @@ const PassengerDetailsModal = (props: any) => {
         />
 
         {validated.incompleteDetails && (
-          <div className='text-end' style={{ color: '#dc3545'}}>
+          <div className="text-end" style={{ color: '#dc3545' }}>
             Please enter mandatory details.
           </div>
         )}

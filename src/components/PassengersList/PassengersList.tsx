@@ -20,8 +20,8 @@ export interface IPassenger {
   passport: string
   address: string
   seatNo?: string
-  flightId: string
-  ticketId: string
+  flightId?: string
+  ticketId?: string
   ancillaryServices: string[]
   specialMeal: string
   shoppingItems: string[]
@@ -207,8 +207,7 @@ const PassengersList = () => {
                               ) as any
                             )
                             getFlightTickets(flightId as string, dispatch)
-                            }
-                          }
+                          }}
                         >
                           {!passenger.isCheckedIn
                             ? 'Check-In'

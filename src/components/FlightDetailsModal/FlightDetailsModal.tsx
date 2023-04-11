@@ -64,10 +64,10 @@ const FlightDetailsModal = (props: any) => {
     inputField: 'ancillaryServices' | 'specialMeals' | 'shoppingItems',
     index: number
   ) => {
-    const temp: any[] = [...flight[inputField]]
+    const temp: any[] = flight ? [...flight[inputField]] : []
     temp[index].value = e.target.value
     temp[index].error = false
-    setFlight({ ...flight, [inputField]: temp })
+    setFlight({ ...flight, [inputField]: temp } as IFlight)
   }
 
   const handleSave = (e: any) => {
@@ -111,18 +111,18 @@ const FlightDetailsModal = (props: any) => {
   const addInput = (
     inputField: 'ancillaryServices' | 'specialMeals' | 'shoppingItems'
   ) => {
-    const temp: any[] = [...flight[inputField]]
+    const temp: any[] = flight ? [...flight[inputField]] : []
     temp.push({ value: '', error: false })
-    setFlight({ ...flight, [inputField]: temp })
+    setFlight({ ...flight, [inputField]: temp } as IFlight)
   }
 
   const removeInput = (
     inputField: 'ancillaryServices' | 'specialMeals' | 'shoppingItems',
     index: number
   ) => {
-    const temp: string[] = [...flight[inputField]]
+    const temp: string[] = flight ? [...flight[inputField]] : []
     temp.splice(index, 1)
-    setFlight({ ...flight, [inputField]: temp })
+    setFlight({ ...flight, [inputField]: temp } as IFlight)
   }
 
   return (
