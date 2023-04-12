@@ -79,7 +79,7 @@ const FlightsList = () => {
                         setSelectedFlight(flight)
                       }}
                     >
-                      Details
+                      {isAdmin ? "Manage" : "Details"}
                     </Button>
                   </td>
                 </tr>

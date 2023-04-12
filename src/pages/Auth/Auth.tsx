@@ -14,7 +14,7 @@ const Auth = () => {
     confirmPass: '',
   }
 
-  const [isSignup, setIsSignup] = useState(true)
+  const [isSignup, setIsSignup] = useState(false)
   const [passMatched, setPassMatched] = useState(true)
   const [data, setData] = useState(initialState)
   const [user, setUser] = useState(null as any)

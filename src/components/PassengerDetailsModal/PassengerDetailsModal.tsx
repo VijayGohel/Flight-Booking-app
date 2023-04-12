@@ -305,7 +305,7 @@ const PassengerDetailsModal = (props: any) => {
 
           <Form.Group className="mb-3">
             <Form.Label className="fw-bold">Ancillary Services</Form.Label>
-            {flight.ancillaryServices.map((service: string) => (
+            {!isAdmin ? flight.ancillaryServices.map((service: string) => (
               <Form.Check
                 key={`ancillaryServices_${service}`}
                 value={service}
@@ -316,12 +316,20 @@ const PassengerDetailsModal = (props: any) => {
                 onChange={handleChange}
                 checked={passenger?.ancillaryServices.includes(service)}
               />
-            ))}
+            ))
+            : passenger?.ancillaryServices.length ? passenger?.ancillaryServices.map((service: string) => 
+              <Row className="my-2" key={`ancillaryServices_${service}`}>
+                <div>{service}</div>
+              </Row>) : 
+              <Row className="my-2">
+                <div>No Ancillary Service Choosen</div>
+              </Row>
+              }
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label className="fw-bold">Special meals</Form.Label>
-            {flight.specialMeals.map((meal: string) => (
+            {!isAdmin ? flight.specialMeals.map((meal: string) => (
               <Form.Check
                 key={`specialMeal_${meal}`}
                 value={meal}
@@ -332,12 +340,17 @@ const PassengerDetailsModal = (props: any) => {
                 onChange={handleChange}
                 checked={passenger?.specialMeal == meal}
               />
-            ))}
+            ))
+            :
+              <Row className="my-2">
+                <div>{passenger?.specialMeal}</div>
+              </Row>
+            }  
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label className="fw-bold">Shopping Items</Form.Label>
-            {flight.shoppingItems.map((item: string) => (
+            {!isAdmin ? flight.shoppingItems.map((item: string) => (
               <Form.Check
                 key={`shoppingItems_${item}`}
                 value={item}
@@ -348,7 +361,15 @@ const PassengerDetailsModal = (props: any) => {
                 onChange={handleChange}
                 checked={passenger?.shoppingItems.includes(item)}
               />
-            ))}
+            ))
+            : passenger?.shoppingItems.length ? passenger?.shoppingItems.map((item: string) => 
+              <Row className="my-2" key={`shoppingItems_${item}`}>
+                <div>{item}</div>
+              </Row>) : 
+              <Row className="my-2">
+                <div>No Shopping Item Choosen</div>
+              </Row>
+              }
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -406,18 +427,18 @@ const PassengerDetailsModal = (props: any) => {
           </Form.Group>
         </Form>
 
-        <SeatMap
-          prevSelectedSeat={!isAdmin ? props.passenger.seatNo : undefined}
-          curSelectedSeat={!isAdmin ? passenger?.seatNo : undefined}
+        {!isAdmin && <SeatMap
+          prevSelectedSeat={props.passenger.seatNo}
+          curSelectedSeat={passenger?.seatNo}
           getSelectedSeat={getSelectedSeat}
           currentFlight={flight}
-        />
+        />}
 
-        {validated.incompleteDetails && (
+        {validated.incompleteDetails && 
           <div className="text-end" style={{ color: '#dc3545' }}>
             Please enter mandatory details.
           </div>
-        )}
+        }
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
